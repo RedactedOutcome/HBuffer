@@ -1,3 +1,6 @@
 .code/
 #Old cpp files
 *.cpp
+
+bin/
+int/
