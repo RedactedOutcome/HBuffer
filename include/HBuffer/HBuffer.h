@@ -29,7 +29,15 @@ public:
     }
     /// @brief Makes a copy of the string
     /// @param string 
-    HBuffer(const std::string& string);
+    HBuffer(const std::string& string){
+        m_Capacity = strlen(str.c_str());
+        m_Size = m_Capacity;
+        m_Data = new char[m_Capacity];
+        m_CanFree = true;
+        m_CanModify = true;
+
+        memcpy(m_Data, str.c_str(), m_Size);
+    }
     /// @brief Moves param buffer into self and releases param buffers data
     /// @param buffer the buffer to get data from and release
     HBuffer(HBuffer&& buffer);
