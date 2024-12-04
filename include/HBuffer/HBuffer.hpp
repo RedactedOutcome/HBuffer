@@ -82,15 +82,61 @@ public:
         return '\0';
     }
 
-    /// @brief Sets the size of the buffer without checking for capacity or modifying data
+    /// @brief Sets the size of the buffer and reallocates and changes data if param size > m_Capacity
     /// @param size the size to set to
-    void SetSize(size_t size) noexcept;
+    void SetSize(size_t size) noexcept{
+        if(size > m_Capacity){
+            char* newData = new char[size];
+            memcpy(newData, m_Data, m_Capacity);
+            m_Capacity = size;
+        }
+        m_Size = size;
+    }
 
-    //Assign buffers, sizes, and owenership
+    //Assign data to point to a string literal.
     //TODO: maybe capacity
-    void Assign(const char* str, bool canFree, bool canModify);
-    void Assign(const char* str, size_t len, bool canFree, bool canModify);
-    void Assign(HBuffer& buffer, bool owns, bool canModify);
+
+
+    /// @brief Makes buffer point to a null terminated string literal
+    /// @param str the string to point to
+    /// @param canFree do we own this data
+    /// @param canModify can we modify this data
+    void Assign(const char* str, bool canFree, bool canModify){
+        Free();
+        m_Data = const_cast<char*>(str);
+        m_Size = strlen(m_Data);
+        m_Capacity = m_Size;
+        m_CanFree = canFree;
+        m_CanModify = canModify;
+    }
+
+    /// @brief Sets data to point at a null terminated string literal.
+    /// @param str the string that the buffer points to
+    /// @param len the new length and capacity
+    /// @param canFree is this buffer owning this data
+    /// @param canModify can we modify this data
+    void Assign(const char* str, size_t len, bool canFree, bool canModify){
+        Free();
+        m_Data = const_cast<char*>(str);
+        m_Size = len;
+        m_Capacity = len;
+        m_CanFree = canFree;
+        m_CanModify = canModify;
+    }
+
+
+    /// @brief Sets buffer to a non owning view that has the same properties of the param buffer
+    /// @param buffer 
+    /// @param owns 
+    /// @param canModify 
+    void Assign(HBuffer& buffer, bool owns, bool canModify){
+        Free();
+        m_Data = buffer.m_Data;
+        m_Size = buffer.m_Size;
+        m_Capacity = buffer.m_Capacity;
+        m_CanModify = buffer.m_CanModify;
+        m_CanFree = false;
+    }
 
     /// @brief We will append the "foods" data to our buffer and the foods data will get released
     void Consume(HBuffer& food);
@@ -120,15 +166,25 @@ public:
         m_CanModify = canModify;
     }
 
-    /// @brief Copies data into buffer and reallocates if newsize is greater than old. If not greater the new size of the buffer is the size of the new string and the rest is unmodified
-    /// @param str
+    /// @brief Calls Free() and makes data point to a copy of the null terminated string literal
+    /// @param str the null ternimated string literal we are copying
     void Copy(const char* str);
+    /// @brief Calls Free() and makes data point to a copy of the null terminated with a size of param size
+    /// @param str the null terminated string literal to copy
+    /// @param size the amount of bytes to copy
     void Copy(char* str, size_t size);
+    /// @brief Calls Free() and makes a copy of that std::string with the size and capacity being the strings size
+    /// @param string the string to make a copy of
     void Copy(const std::string& string);
+    /// @brief Calls Free() Makes an exact copy of param buff except we own this new data
+    /// @param buff the HBuffer to make a copy of
     void Copy(const HBuffer& buff);
 
-    ///@brief Copies data into newly allocated buffer except new buffer has a null terminateor
+    ///@brief Calls Free() and copies all characters and adds a null terminator at end of buffer. The size will be the amount of characters in the string despite the buffers size being +1 with the null terminator
     void CopyString(const char* str);
+    /// @brief 
+    /// @param str 
+    /// @param size 
     void CopyString(char* str, size_t size);
     void CopyString(const std::string& string);
     void CopyString(const HBuffer& buff);
