@@ -12,5 +12,10 @@ else
 #include <string>
 #include <map>
 #include <memory>
+#include <algorithm>
 
+#endif
+
+#if __cplusplus < 201103L
+#error HBUFFER ONLY SUPPORTS CPP11+
 #endif
