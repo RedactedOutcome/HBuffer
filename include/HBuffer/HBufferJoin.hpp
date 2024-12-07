@@ -4,9 +4,10 @@
 
 class HBufferJoin{
 public:
-    HBufferJoin() HBUFF_NOEXCEPT;
-    HBufferJoin(HBuffer& buff1, HBuffer& buff2) HBUFF_NOEXCEPT;
-    HBufferJoin(HBuffer&& buff1) HBUFF_NOEXCEPT;
+    HBufferJoin() HBUFF_NOEXCEPT{}
+    HBufferJoin(HBuffer& buff1, HBuffer& buff2) HBUFF_NOEXCEPT : m_Buffer1(buff1), m_Buffer2(buff2){}
+    HBufferJoin(HBuffer&& buff1) HBUFF_NOEXCEPT : m_Buffer1(buff1){}
+    HBufferJoin(HBuffer&& buff1, HBuffer&& buff2) HBUFF_NOEXCEPT : m_Buffer1(buff1), m_Buffer2(buff2){}
     HBufferJoin(HBufferJoin&&) = delete;
     ~HBufferJoin();
 
