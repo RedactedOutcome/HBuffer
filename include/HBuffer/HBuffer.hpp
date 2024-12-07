@@ -89,6 +89,35 @@ public:
         m_CanModify = false;
     }
 
+    /// @brief Reserves the buffer to be atleast param newSize bytes. If newSize <= capacity then no reallocation is done. Else we free/release data and reallocate
+    /// @param newSize 
+    void Reserve(size_t newSize) HBUFF_NOEXCEPT{
+        if(newSize <= m_Capacity)return;
+        char* data = new char[newSize];
+        memcpy(data, m_Data, m_Capacity);
+        if(m_CanFree)delete m_Data;
+        m_Data = data;
+        m_Capacity = newSize;
+        m_CanFree = true;
+        m_CanModify = true;
+        m_Capacity = newSize;
+    }
+
+
+    /// @brief Reserves the buffer to have atleast newSize bytes. Only reallocate if newSize >= capacity
+    void ReserveString(size_t newSize) HBUFF_NOEXCEPT{
+        if(newSize < m_Capacity)return;
+        char* data = new char[newSize + 1];
+        memcpy(data, m_Data, m_Capacity);
+        memset(data + m_Capacity, ' ', newSize - m_Capacity);
+        memset(data, '\0', newSize);
+        if(m_CanFree)delete m_Data;
+        m_Data = data;
+        m_Capacity = newSize;
+        m_CanFree = true;
+        m_CanModify = true;
+        m_Capacity = newSize;
+    }
     /*
     /// @brief Retrieves the char at param i. Throws std::out_of_range if i is out of buffer range/size
     char Get(size_t i) const HBUFF_NOEXCEPT;
