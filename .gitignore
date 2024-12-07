@@ -1,6 +1,6 @@
 .vscode/
 .code/
 #Old cpp files
-*.cpp
+include/*.cpp
 bin/
 int/
