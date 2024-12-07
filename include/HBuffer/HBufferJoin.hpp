@@ -313,8 +313,8 @@ public:
         return m_Buffer2.m_Data[i - m_Buffer1.m_Size];
     }
     /// @return returns the character at i. returns '\0' if out of range of buffers
-    char Get(Size_t i) const HBUFF_NOEXCEPT{
-        if(i <= m_Size)return m_Buffer1.m_Data[i];
+    char Get(size_t i) const HBUFF_NOEXCEPT{
+        if(i <= m_Buffer1.m_Size)return m_Buffer1.m_Data[i];
         if(i >= m_Buffer1.m_Size + m_Buffer2.m_Size)return false;
         return m_Buffer2.m_Data[i - m_Buffer1.m_Size];
     }

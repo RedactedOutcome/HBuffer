@@ -104,7 +104,7 @@ public:
     }
 
 
-    /// @brief Reserves the buffer to have atleast newSize bytes. Only reallocate if newSize >= capacity
+    /// @brief Reserves the buffer to have atleast newSize bytes. Only reallocate if newSize >= capacity.Fills remaining space after size with ' ' and ends with a null terminator
     void ReserveString(size_t newSize) HBUFF_NOEXCEPT{
         if(newSize < m_Capacity)return;
         char* data = new char[newSize + 1];
