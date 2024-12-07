@@ -9,7 +9,7 @@ public:
     HBufferJoin(HBuffer&& buff1) HBUFF_NOEXCEPT : m_Buffer1(buff1){}
     HBufferJoin(HBuffer&& buff1, HBuffer&& buff2) HBUFF_NOEXCEPT : m_Buffer1(buff1), m_Buffer2(buff2){}
     HBufferJoin(HBufferJoin&&) = delete;
-    ~HBufferJoin();
+    ~HBufferJoin(){}
 
     /// @brief calls Free() on buffers
     void Free() HBUFF_NOEXCEPT{
