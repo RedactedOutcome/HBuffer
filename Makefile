@@ -1,12 +1,12 @@
 INT_DIR = int/
-BIN
+OUTPUT_DIR = bin/
 MF 		= mkdir -p
 RF      = rd /s /q
 CC = cl
 LK = link
 CFlags = /c /Fo$(INT_DIR) /std:c++17 /MD
-Defines = /DPLATFORM=Windows /DWINDOWS_IGNORE_PACKING_MISMATCH
-IncludeDirs = /Isrc
+Defines = /D /DWINDOWS_IGNORE_PACKING_MISMATCH
+IncludeDirs = /Isrc /Iinclude
 LibDirs = 
 Libs = GDI32.lib Shell32.lib kernel32.lib User32.lib
 LFlags = $(INT_DIR)*.obj /out:$(OUTPUT_DIR)$(TargetName).exe
@@ -20,18 +20,16 @@ else
 Defines += /DNDEBUG
 
 ifeq ($(Configuration), Release)
-Defines += /DWEB_RELEASE
 CFlags += /Ot /Oi
 LFLAGS += /LTCG /INCREMENTAL:NO /NODEFAULTLIB /Gy
 else
 CFlags += /Ot /Oi /O2 /GL /Gw
-Defines += /DWEB_DIST
 LFLAGS += /LTCG /INCREMENTAL:NO /NODEFAULTLIB /OPT:REF /OPT:ICF /Gy
 endif
 endif
-
+SRC_DIR = src/
 CORE_DIR = $(SRC_DIR)Core/
-Files+= $(SRC_DIR)Test.cpp
+Files+= $(SRC_DIR)Example1.cpp
 
 IncludeDirs += $(HBUFFER_LIB_SRC)
 
