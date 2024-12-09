@@ -59,10 +59,16 @@ public:
 
         memcpy(m_Data, str.c_str(), m_Size);
     }
-    
+
     /// @brief will Free data if owns
     ~HBuffer(){
+    #ifdef HBUFFER_PRINT_DECONSTRUCTION_STATUS
+        std::cout << "HBuffer Deconstructor Before Free" <<std::endl;
         Free();
+        std::cout<< "HBuffer Deconstructor After Free" << std::endl;
+    #else
+        Free();
+    #endif
     }
     /// @brief Frees data if buffer is owning and releases after regardless
     inline void Free() HBUFF_NOEXCEPT{  
