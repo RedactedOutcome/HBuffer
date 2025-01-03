@@ -184,15 +184,22 @@ public:
 
     /// @brief Sets buffer to a non owning view that has the same properties of the param buffer
     /// @param buffer 
-    /// @param owns 
-    /// @param canModify 
-    void Assign(HBuffer& buffer, bool owns, bool canModify) HBUFF_NOEXCEPT{
+    /// @param canFree are we allowing the buffer to now own the data of param buffer? 
+    /// @param canModify are we going to allow the buffer to modify the contents of the new data from param buffer?
+    void Assign(HBuffer& buffer, bool canFree, bool canModify) HBUFF_NOEXCEPT{
         Free();
+        /*
         m_Data = buffer.m_Data;
         m_Size = buffer.m_Size;
         m_Capacity = buffer.m_Capacity;
         m_CanModify = buffer.m_CanModify;
         m_CanFree = false;
+        */
+        m_Data = buffer.m_Data;
+        m_Size = buffer.m_Size;
+        m_Capacity = buffer.m_Capacity;
+        m_CanFree = canFree;
+        m_CanModify = canModify;
     }
 
     /// @brief We will append the "foods" data to our buffer and the foods data will get released
