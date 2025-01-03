@@ -181,6 +181,23 @@ public:
         m_CanModify = canModify;
     }
 
+    void Assign(const HBuffer& buffer) HBUFF_NOEXCEPT{
+        Free();
+        m_Data = buffer.m_Data;
+        m_Size = buffer.m_Size;
+        m_Capacity = buffer.m_Capacity;
+        m_CanModify = buffer.m_CanModify;
+        m_CanFree = false;
+    }
+    void Assign(HBuffer&& buffer) HBUFF_NOEXCEPT{
+        Free();
+        m_Data = buffer.m_Data;
+        m_Size = buffer.m_Size;
+        m_Capacity = buffer.m_Capacity;
+        m_CanModify = buffer.m_CanModify;
+        m_CanFree = buffer.m_CanFree;
+        buffer.Release();
+    }
 
     /// @brief Sets buffer to a non owning view that has the same properties of the param buffer
     /// @param buffer 
