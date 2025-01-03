@@ -8,6 +8,8 @@ public:
     HBufferJoin(HBuffer& buff1, HBuffer& buff2) HBUFF_NOEXCEPT : m_Buffer1(buff1), m_Buffer2(buff2){}
     HBufferJoin(HBuffer&& buff1) HBUFF_NOEXCEPT : m_Buffer1(buff1){}
     HBufferJoin(HBuffer&& buff1, HBuffer&& buff2) HBUFF_NOEXCEPT : m_Buffer1(buff1), m_Buffer2(buff2){}
+    //TODO: possible copy constructor
+    //TODO: maybe just make move constructor move the HBuffers inside them
     HBufferJoin(HBufferJoin&&) = delete;
     ~HBufferJoin(){}
 
@@ -308,11 +310,13 @@ public:
         return 0;
     }
 public:
+    /// @brief attempts to get the byte from the join at index i. Does not do safety checks so there is segfault potential.
     /// @return returns the character at i.
     char At(size_t i) const HBUFF_NOEXCEPT{
         if(i <= m_Buffer1.m_Size)return m_Buffer1.m_Data[i];
         return m_Buffer2.m_Data[i - m_Buffer1.m_Size];
     }
+    /// @brief same as function At(size_t i) except we have safety checks where if out of range we return '\0'
     /// @return returns the character at i. returns '\0' if out of range of buffers
     char Get(size_t i) const HBUFF_NOEXCEPT{
         if(i <= m_Buffer1.m_Size)return m_Buffer1.m_Data[i];
