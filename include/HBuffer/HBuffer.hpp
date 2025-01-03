@@ -523,11 +523,11 @@ public:
         return 0;
     }
 
+    /// @brief Copies contents of buffer into param dest for len bytes
     void Memcpy(void* dest, size_t len) const HBUFF_NOEXCEPT{
         memcpy(dest, m_Data, len);
     }
-    /// @brief Attempts to memcpy into dest if in range and pads with 0s if len is greater than accumulated buffers size
-    /// @param at the position in the buffers to start reading from
+    /// @brief Attempts to copy contents of buffer from at into dest for len bytes
     void Memcpy(void* dest, size_t at, size_t len) const HBUFF_NOEXCEPT{
         if(at >= m_Size)return;
         memcpy(dest, m_Data + at, len);
@@ -545,7 +545,19 @@ public:
     HBUFF_CONSTEXPR size_t GetSize() const HBUFF_NOEXCEPT{return m_Size;}
     HBUFF_CONSTEXPR size_t GetCapacity() const HBUFF_NOEXCEPT{return m_Capacity;}
 public:
-    //Assins buffer to non owning copy of data
+    /*
+    /// @brief Frees data and sets data to a non owning view of param right's data
+    HBuffer& operator=(HBuffer& right) HBUFF_NOEXCEPT{
+        Free();
+        m_Data = right.m_Data;
+        m_Size = right.m_Size;
+        m_Capacity = right.m_Capacity;
+        m_CanModify = right.m_CanModify;
+        m_CanFree = false;
+        return *this;
+    }*/
+    
+    /// @brief Assigns the current buffers content as a copy of param right's data
     HBuffer& operator=(const HBuffer& right) HBUFF_NOEXCEPT{
         m_Size = right.m_Size;
         if(!m_Data || !m_CanModify || m_Size >= m_Capacity){
@@ -562,6 +574,8 @@ public:
         memcpy(m_Data, right.m_Data, m_Size);
         return *this;
     }
+    
+    /// @brief Frees current data if possible and basically does a move constructor with param right
     HBuffer& operator=(HBuffer&& right) HBUFF_NOEXCEPT{
         Free();
         m_Data = right.m_Data;
