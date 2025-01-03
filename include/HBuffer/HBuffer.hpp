@@ -95,6 +95,20 @@ public:
         m_CanModify = false;
     }
 
+    /// @brief Sets the size of the buffer and reallocates and changes data if param size > m_Capacity
+    /// @param size the size to set to
+    void SetSize(size_t size) HBUFF_NOEXCEPT{
+        if(size > m_Capacity){
+            char* newData = new char[size];
+            memcpy(newData, m_Data, m_Capacity);
+            if(m_CanFree)m_Data = newData;
+            m_CanFree = true;
+            m_CanModify = true;
+            m_Capacity = size;
+        }
+        m_Size = size;
+    }
+
     /// @brief Reserves the buffer to be atleast param newSize bytes. If newSize <= capacity then no reallocation is done. Else we free/release data and reallocate
     /// @param newSize 
     void Reserve(size_t newSize) HBUFF_NOEXCEPT{
@@ -137,17 +151,6 @@ public:
     char Get(size_t i) const HBUFF_NOEXCEPT{
         if(i < m_Size)return m_Data[i];
         return '\0';
-    }
-
-    /// @brief Sets the size of the buffer and reallocates and changes data if param size > m_Capacity
-    /// @param size the size to set to
-    void SetSize(size_t size) HBUFF_NOEXCEPT{
-        if(size > m_Capacity){
-            char* newData = new char[size];
-            memcpy(newData, m_Data, m_Capacity);
-            m_Capacity = size;
-        }
-        m_Size = size;
     }
 
     //Assign data to point to a string literal.
