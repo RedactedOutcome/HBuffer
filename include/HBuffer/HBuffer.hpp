@@ -184,6 +184,8 @@ public:
         m_CanModify = canModify;
     }
 
+
+    /// @brief frees and assigns self as a non owning view of param buffer. May modify if param buffer allows modifying
     void Assign(const HBuffer& buffer) HBUFF_NOEXCEPT{
         Free();
         m_Data = buffer.m_Data;
@@ -192,6 +194,8 @@ public:
         m_CanModify = buffer.m_CanModify;
         m_CanFree = false;
     }
+
+    /// @brief Frees data and assigns data to param buffer. Then param buffer is released. Essentially making this buffer the owner
     void Assign(HBuffer&& buffer) HBUFF_NOEXCEPT{
         Free();
         m_Data = buffer.m_Data;
@@ -603,23 +607,42 @@ public:
     ///HBuffer& operator+=(size_t offset) HBUFF_NOEXCEPT;
     //TODO:maybe possible -= operator if needed
 
-    //Checks if content matches
+    /// @brief compares if the data inside the buffer matches and not the places in memory.
     HBUFF_CONSTEXPR bool operator==(const HBuffer& right)const HBUFF_NOEXCEPT{
-        if(!m_Data || !right.m_Data)return false;
+        //if(m_Data != right.m_Data)return false;
+        //if(m_Size != right.m_Size)return false;
+        //for(size_t i = 0; i < m_Size; i++)
+        //    if(m_Data[i] != right.m_Data[i])return false;
+        //return true;
         if(m_Size != right.m_Size)return false;
+        if(!m_Data || !right.m_Data)return false;
+
+        const char* other = right.m_Data;
         for(size_t i = 0; i < m_Size; i++)
-            if(m_Data[i] != right.m_Data[i])return false;
+            if(m_Data[i] != other[i])return false;
         return true;
     }
+    /// @brief compares if the data inside the buffers are strings and match
     HBUFF_CONSTEXPR bool operator==(const char* str)const HBUFF_NOEXCEPT{
-        size_t len = 0;
-        while(str[len] != '\0')len++;
-        for(size_t i = 0; i < len; i++){
-            if(m_Data[i] != str[i])return false;
+        size_t i = 0;
+        while(true){
+            char c = m_Data[i];
+            if(c != str[i++])return false;
+            if(c == '\0')return true;
         }
+        //Never getting called
         return true;
     }
-    HBUFF_CONSTEXPR bool operator!=(const HBuffer& right)const HBUFF_NOEXCEPT;
+    /// @brief returns if the contents are not equal. If one of the buffers does not have data returns false; else returns if contents match.
+    HBUFF_CONSTEXPR bool operator!=(const HBuffer& right)const HBUFF_NOEXCEPT{
+        if(m_Size != right.m_Size)return true;
+        if(!m_Data || !right.m_Data)return false;
+
+        const char* other = right.m_Data;
+        for(size_t i = 0; i < m_Size; i++)
+            if(m_Data[i] != other[i])return true;
+        return false;
+    }
 private:
     char* m_Data = nullptr;
     size_t m_Size = 0;
