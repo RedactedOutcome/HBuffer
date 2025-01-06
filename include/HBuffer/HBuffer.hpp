@@ -294,7 +294,7 @@ public:
     /// @brief sam as substring without null terminator. allocates a subbuffer of buffer starting at param at with a length of len.
     /// @param at the location in the buffer that will start filling up the substring
     /// @param len the amount of characters to copy to new buffer. If -1 than whole buffer. Caps out on buffer size
-    HBuffer SubString(size_t at, size_t len) const HBUFF_NOEXCEPT{
+    HBuffer SubBuffer(size_t at, size_t len) const HBUFF_NOEXCEPT{
         HBuffer buffer;
         buffer.m_Capacity = std::min(len, m_Size);
         buffer.m_Data = new char[buffer.m_Capacity];
