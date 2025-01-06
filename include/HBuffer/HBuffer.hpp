@@ -290,6 +290,25 @@ public:
         buffer.m_CanModify = true;
         return buffer;
     }
+    
+    /// @brief sam as substring without null terminator. allocates a subbuffer of buffer starting at param at with a length of len.
+    /// @param at the location in the buffer that will start filling up the substring
+    /// @param len the amount of characters to copy to new buffer. If -1 than whole buffer. Caps out on buffer size
+    HBuffer SubString(size_t at, size_t len) const HBUFF_NOEXCEPT{
+        HBuffer buffer;
+        buffer.m_Capacity = std::min(len, m_Size);
+        buffer.m_Data = new char[buffer.m_Capacity];
+
+        size_t i = 0;
+        for(i = 0; i < buffer.m_Capacity; i++){
+            buffer.m_Data[i] = m_Data[at];
+            at++;
+        }
+        buffer.m_Size = i;
+        buffer.m_CanFree = true;
+        buffer.m_CanModify = true;
+        return buffer;
+    }
     /// @brief swaps the contents of self with param buff
     /// @param buff
     void Swap(HBuffer& buff) HBUFF_NOEXCEPT{

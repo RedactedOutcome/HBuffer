@@ -69,6 +69,32 @@ public:
         memset(str + len, '\0', 1);
         return HBuffer(str, len, true);
     }
+    
+    HBuffer SubBuffer(size_t pos, size_t len) const HBUFF_NOEXCEPT{
+        const char* str1 = m_Buffer1.GetCStr();
+        const char* str2 = m_Buffer2.GetCStr();
+
+        size_t len1 = m_Buffer1.GetSize();
+        size_t len2 = m_Buffer2.GetSize();
+        size_t totalLength = len1 + len2;
+
+        if(pos >= totalLength)
+            return HBuffer(nullptr, 0, false, false);
+
+        len = std::min(len, totalLength - pos);
+        //Or maybe out of range exception
+        if(len < 1)return HBuffer(nullptr, 0, false, false);
+        char* str = new char[len];
+        
+        size_t buff1FillSize = 0;
+        if(pos < len1){
+            //Use first buffer
+            buff1FillSize = std::min(len, len1 - pos);
+            memcpy(str, str1 + pos, buff1FillSize);
+        }
+        memcpy(str + buff1FillSize, str2 + (std::max(pos, len1) - len1), std::min(len - buff1FillSize, len2 - pos - buff1FillSize));
+        return HBuffer(str, len, true);
+    }
 public:
     bool StartsWith(size_t at, const char* str) const HBUFF_NOEXCEPT{
         size_t len = strlen(str);
