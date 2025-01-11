@@ -94,6 +94,19 @@ public:
         m_CanFree = false;
         m_CanModify = false;
     }
+    /// @brief only changes m_Data pointer without freeing/resizing.
+    void SetData(char* data) HBUFF_NOEXCEPT{
+        m_Data = data;
+    }
+    /// @brief changes if we own the data or not
+    void SetCanFree(bool value) HBUFF_NOEXCEPT{
+        m_CanFree = value;
+    }
+
+    /// @brief changes if we are allowed to modify the data or not. without nullptr checks
+    void SetCanModify(bool canModify) HBUFF_NOEXCEPT{
+        m_CanModify = canModify;
+    }
 
     /// @brief Sets the size of the buffer and reallocates and changes data if param size > m_Capacity
     /// @param size the size to set to
@@ -337,7 +350,7 @@ public:
         m_Size = strlen(str);
         if(m_Size < 1){
             //copy of nothing
-            Free();
+            //Free();
             return;
         }
         if(!m_Data || !m_CanModify || m_Size > m_Capacity){
@@ -352,6 +365,22 @@ public:
         }
 
         memcpy(m_Data, const_cast<char*>(str), m_Size);
+    }
+    /// @brief Copies param buffer. Only reallocates if we need more data or if we cant modify the current data
+    void Copy(const HBuffer& buffer)HBUFF_NOEXCEPT{
+        m_Size = buffer.m_Size;
+        if(m_Size < 1)return;
+        if(!m_Data || !m_CanModify || m_Size > m_Capacity){
+            Free();
+
+            m_Data = new char[m_Capacity];
+            m_Capacity = m_Size;
+            memcpy(m_Data, buffer.m_Data, m_Size);
+            m_CanFree = true;
+            m_CanModify = true;
+            return;
+        }
+        memcpy(m_Data, buffer.m_Data, m_Size);
     }
     /// @brief makes data point to a copy of the null terminated with a size of param size. Frees and reallocates if no self has no valid data ptr, cant modify self, or self size > capacity.
     /// @param str the null terminated string literal to copy
