@@ -366,22 +366,6 @@ public:
 
         memcpy(m_Data, const_cast<char*>(str), m_Size);
     }
-    /// @brief Copies param buffer. Only reallocates if we need more data or if we cant modify the current data
-    void Copy(const HBuffer& buffer)HBUFF_NOEXCEPT{
-        m_Size = buffer.m_Size;
-        if(m_Size < 1)return;
-        if(!m_Data || !m_CanModify || m_Size > m_Capacity){
-            Free();
-
-            m_Data = new char[m_Capacity];
-            m_Capacity = m_Size;
-            memcpy(m_Data, buffer.m_Data, m_Size);
-            m_CanFree = true;
-            m_CanModify = true;
-            return;
-        }
-        memcpy(m_Data, buffer.m_Data, m_Size);
-    }
     /// @brief makes data point to a copy of the null terminated with a size of param size. Frees and reallocates if no self has no valid data ptr, cant modify self, or self size > capacity.
     /// @param str the null terminated string literal to copy
     /// @param size the amount of bytes to copy
@@ -410,8 +394,7 @@ public:
     void Copy(const std::string& string)HBUFF_NOEXCEPT{
         m_Size = string.size();
         if(m_Size < 1){
-            //copy of nothing
-            Free();
+            //Free();
             return;
         }
         if(!m_Data || !m_CanModify || m_Size > m_Capacity){
@@ -430,6 +413,7 @@ public:
     /// @param buff the HBuffer to make a copy of
     void Copy(const HBuffer& buff)HBUFF_NOEXCEPT{
         m_Size = buff.m_Size;
+        if(m_Size < 1)return;
         if(!m_Data || !m_CanModify || m_Size >= m_Capacity){
             Free();
             m_Capacity = m_Size;
@@ -448,7 +432,7 @@ public:
     void CopyString(const char* str)HBUFF_NOEXCEPT{
         m_Size = strlen(str);
         if(m_Size < 1){
-            Free();
+            //Free();
             return;
         }
         if(!m_Data || m_CanModify || m_Size >= m_Capacity){
@@ -468,7 +452,7 @@ public:
     void CopyString(char* str, size_t characters)HBUFF_NOEXCEPT{
         m_Size = characters;
         if(m_Size < 1){
-            Free();
+            //Free();
             return;
         }
         if(!m_Data || m_CanModify || m_Size >= m_Capacity){
@@ -488,7 +472,7 @@ public:
     void CopyString(const std::string& string) HBUFF_NOEXCEPT{
         m_Size = string.size();
         if(m_Size < 1){
-            Free();
+            //Free();
             return;
         }
         if(!m_Data || m_CanModify || m_Size >= m_Capacity){
@@ -509,7 +493,7 @@ public:
     void CopyString(const HBuffer& buff) HBUFF_NOEXCEPT{
         m_Size = buff.m_Size;
         if(m_Size < 1){
-            Free();
+            //Free();
             return;
         }
         if(!m_Data || m_CanModify || m_Size >= m_Capacity){
