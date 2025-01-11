@@ -423,8 +423,6 @@ public:
             Delete();
             m_Capacity = m_Size;
             char* data = new char[m_Capacity];
-            std::cout<<m_Capacity<<std::endl;
-            std::cout<<(const char*)buff.m_Data<<std::endl;
             memcpy(data, buff.m_Data, m_Capacity);
             m_Data = data;
             m_CanFree = true;
