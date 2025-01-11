@@ -606,7 +606,7 @@ public:
     HBuffer& operator=(const HBuffer& right) HBUFF_NOEXCEPT{
         m_Size = right.m_Size;
         if(!m_Data || !m_CanModify || m_Size >= m_Capacity){
-            Free();
+            Delete();
             m_Capacity = m_Size;
             char* data = new char[m_Capacity];
             memcpy(data, right.m_Data, m_Capacity);
