@@ -70,6 +70,13 @@ public:
         Free();
     #endif
     }
+
+    /// @brief Frees data if can. Only modifies m_CanFree and m_Data
+    inline void Delete() HBUFF_NOEXCEPT{
+        if(m_CanFree)delete m_Data;
+        m_Data = nullptr;
+        m_CanFree = false;
+    }
     /// @brief Frees data if buffer is owning and releases after regardless
     inline void Free() HBUFF_NOEXCEPT{  
         if(m_CanFree){
@@ -354,8 +361,7 @@ public:
             return;
         }
         if(!m_Data || !m_CanModify || m_Size > m_Capacity){
-            Free();
-
+            Delete();
             m_Data = new char[m_Capacity];
             m_Capacity = m_Size;
             memcpy(m_Data, str, m_Size);
@@ -377,7 +383,7 @@ public:
             return;
         }
         if(!m_Data || !m_CanModify || m_Size > m_Capacity){
-            Free();
+            Delete();
 
             m_Data = new char[m_Capacity];
             m_Capacity = m_Size;
@@ -398,8 +404,7 @@ public:
             return;
         }
         if(!m_Data || !m_CanModify || m_Size > m_Capacity){
-            Free();
-
+            Delete();
             m_Data = new char[m_Capacity];
             m_Size = m_Capacity;
             m_CanFree = true;
@@ -415,9 +420,11 @@ public:
         m_Size = buff.m_Size;
         if(m_Size < 1)return;
         if(!m_Data || !m_CanModify || m_Size >= m_Capacity){
-            Free();
+            Delete();
             m_Capacity = m_Size;
             char* data = new char[m_Capacity];
+            std::cout<<m_Capacity<<std::endl;
+            std::cout<<(const char*)buff.m_Data<<std::endl;
             memcpy(data, buff.m_Data, m_Capacity);
             m_Data = data;
             m_CanFree = true;
@@ -436,7 +443,7 @@ public:
             return;
         }
         if(!m_Data || m_CanModify || m_Size >= m_Capacity){
-            Free();
+            Delete();
             m_Capacity = m_Size + 1;
             m_Data = new char[m_Capacity];
             memcpy(m_Data, str, m_Size + 1);
@@ -456,7 +463,7 @@ public:
             return;
         }
         if(!m_Data || m_CanModify || m_Size >= m_Capacity){
-            Free();
+            Delete();
             m_Capacity = m_Size + 1;
             m_Data = new char[m_Capacity];
             memcpy(m_Data, str, m_Size);
@@ -476,12 +483,11 @@ public:
             return;
         }
         if(!m_Data || m_CanModify || m_Size >= m_Capacity){
-            Free();
+            Delete();
             m_Capacity = m_Size + 1;
             m_Data = new char[m_Capacity];
             memcpy(m_Data, string.c_str(), m_Size);
             m_Data[m_Size] = '\0';
-            
             m_CanFree = true;
             m_CanModify = true;
             return;
@@ -497,7 +503,7 @@ public:
             return;
         }
         if(!m_Data || m_CanModify || m_Size >= m_Capacity){
-            Free();
+            Delete();
             m_Capacity = m_Size + 1;
             m_Data = new char[m_Capacity];
             memcpy(m_Data, buff.m_Data, m_Size);
