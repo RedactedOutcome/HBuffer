@@ -20,8 +20,8 @@ public:
     }
     
     HBuffer SubStringToDelim(char delimeter)const HBUFF_NOEXCEPT{
-        const char* str1 = m_Buffer1.GetCStr();
-        const char* str2 = m_Buffer2.GetCStr();
+        const char* str1 = m_Buffer1.GetData();
+        const char* str2 = m_Buffer2.GetData();
 
         size_t len1 = m_Buffer1.GetSize();
         size_t len2 = m_Buffer2.GetSize();
@@ -44,8 +44,8 @@ public:
         return SubString(0, i);
     }
     HBuffer SubString(size_t pos, size_t len) const HBUFF_NOEXCEPT{
-        const char* str1 = m_Buffer1.GetCStr();
-        const char* str2 = m_Buffer2.GetCStr();
+        const char* str1 = m_Buffer1.GetData();
+        const char* str2 = m_Buffer2.GetData();
 
         size_t len1 = m_Buffer1.GetSize();
         size_t len2 = m_Buffer2.GetSize();
@@ -71,8 +71,8 @@ public:
     }
     
     HBuffer SubBuffer(size_t pos, size_t len) const HBUFF_NOEXCEPT{
-        const char* str1 = m_Buffer1.GetCStr();
-        const char* str2 = m_Buffer2.GetCStr();
+        const char* str1 = m_Buffer1.GetData();
+        const char* str2 = m_Buffer2.GetData();
 
         size_t len1 = m_Buffer1.GetSize();
         size_t len2 = m_Buffer2.GetSize();
@@ -99,8 +99,8 @@ public:
     bool StartsWith(size_t at, const char* str) const HBUFF_NOEXCEPT{
         size_t len = strlen(str);
 
-        const char* str1 = m_Buffer1.GetCStr();
-        const char* str2 = m_Buffer2.GetCStr();
+        const char* str1 = m_Buffer1.GetData();
+        const char* str2 = m_Buffer2.GetData();
         size_t len1 = m_Buffer1.GetSize();
         size_t len2 = m_Buffer2.GetSize();
         size_t i = at, strPos = 0;
@@ -123,8 +123,8 @@ public:
         return true;
     }
     bool StartsWith(size_t at, const char* str, size_t len) const HBUFF_NOEXCEPT{
-        const char* str1 = m_Buffer1.GetCStr();
-        const char* str2 = m_Buffer2.GetCStr();
+        const char* str1 = m_Buffer1.GetData();
+        const char* str2 = m_Buffer2.GetData();
         size_t len1 = m_Buffer1.GetSize();
         size_t len2 = m_Buffer2.GetSize();
         size_t strPos = 0;
@@ -149,8 +149,8 @@ public:
     bool StartsWith(const char* str) const HBUFF_NOEXCEPT{
         size_t len = strlen(str);
 
-        const char* str1 = m_Buffer1.GetCStr();
-        const char* str2 = m_Buffer2.GetCStr();
+        const char* str1 = m_Buffer1.GetData();
+        const char* str2 = m_Buffer2.GetData();
         size_t len1 = m_Buffer1.GetSize();
         size_t len2 = m_Buffer2.GetSize();
         size_t i = 0, strPos = 0;
@@ -173,8 +173,8 @@ public:
         return true;
     }
     bool StartsWith(const char* str, size_t len) const HBUFF_NOEXCEPT{
-        const char* str1 = m_Buffer1.GetCStr();
-        const char* str2 = m_Buffer2.GetCStr();
+        const char* str1 = m_Buffer1.GetData();
+        const char* str2 = m_Buffer2.GetData();
         size_t len1 = m_Buffer1.GetSize();
         size_t len2 = m_Buffer2.GetSize();
         size_t i = 0, strPos = 0;
@@ -201,8 +201,8 @@ public:
     ///@brief opies from buffers into dest.
     ///@return returns 0 if success
     int Memcpy(void* dest, size_t len) const HBUFF_NOEXCEPT{
-        const char* str1 = m_Buffer1.GetCStr();
-        const char* str2 = m_Buffer2.GetCStr();
+        const char* str1 = m_Buffer1.GetData();
+        const char* str2 = m_Buffer2.GetData();
         size_t len1 = m_Buffer1.GetSize();
         size_t len2 = m_Buffer2.GetSize();
         size_t i = 0, strPos = 0;
@@ -225,8 +225,8 @@ public:
         return 0;
     }
     int Memcpy(void* dest, size_t offset, size_t len) const HBUFF_NOEXCEPT{
-        const char* str1 = m_Buffer1.GetCStr();
-        const char* str2 = m_Buffer2.GetCStr();
+        const char* str1 = m_Buffer1.GetData();
+        const char* str2 = m_Buffer2.GetData();
         size_t len1 = m_Buffer1.GetSize();
         size_t len2 = m_Buffer2.GetSize();
         size_t i = offset, strPos = 0;
@@ -252,8 +252,8 @@ public:
     int StrCmp(const char* str) const HBUFF_NOEXCEPT{
         size_t len = strlen(str);
 
-        const char* str1 = m_Buffer1.GetCStr();
-        const char* str2 = m_Buffer2.GetCStr();
+        const char* str1 = m_Buffer1.GetData();
+        const char* str2 = m_Buffer2.GetData();
         size_t len1 = m_Buffer1.GetSize();
         size_t len2 = m_Buffer2.GetSize();
         size_t i = 0, strPos = 0;
@@ -284,8 +284,8 @@ public:
     int StrXCmp(const char* str) const HBUFF_NOEXCEPT{
         size_t len = strlen(str);
 
-        const char* str1 = m_Buffer1.GetCStr();
-        const char* str2 = m_Buffer2.GetCStr();
+        const char* str1 = m_Buffer1.GetData();
+        const char* str2 = m_Buffer2.GetData();
         size_t len1 = m_Buffer1.GetSize();
         size_t len2 = m_Buffer2.GetSize();
         size_t i = 0, strPos = 0;
@@ -311,8 +311,8 @@ public:
     int StrXCmp(size_t at, const char* str) const HBUFF_NOEXCEPT{
         size_t len = strlen(str);
 
-        const char* str1 = m_Buffer1.GetCStr();
-        const char* str2 = m_Buffer2.GetCStr();
+        const char* str1 = m_Buffer1.GetData();
+        const char* str2 = m_Buffer2.GetData();
         size_t len1 = m_Buffer1.GetSize();
         size_t len2 = m_Buffer2.GetSize();
         size_t i = at, strPos = 0;
