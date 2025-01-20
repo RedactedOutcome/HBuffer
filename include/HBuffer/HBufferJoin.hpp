@@ -127,21 +127,21 @@ public:
         const char* str2 = m_Buffer2.GetCStr();
         size_t len1 = m_Buffer1.GetSize();
         size_t len2 = m_Buffer2.GetSize();
-        size_t i = at, strPos = 0;
+        size_t strPos = 0;
         while(true){
             if(strPos == len)return true;
-            if(i >= len1)break;
-            if(str[strPos] != str1[i])return false;
-            i++;
+            if(at >= len1)break;
+            if(str[strPos] != str1[at])return false;
+            at++;
             strPos++;
         }
 
-        i-=len1;
+        at-=len1;
         while(true){
             if(strPos == len)return true;
-            if(i >= len2)return false;
-            if(str[strPos] != str2[i])return false;
-            i++;
+            if(at >= len2)return false;
+            if(str[strPos] != str2[at])return false;
+            at++;
             strPos++;
         }
         return true;

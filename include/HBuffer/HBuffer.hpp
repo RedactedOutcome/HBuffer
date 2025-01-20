@@ -275,13 +275,16 @@ public:
     }
 
     void Append(HBuffer& buffer) HBUFF_NOEXCEPT{
-        size_t newSize = m_Size + buffer.m_Size;
+        size_t otherSize = buffer.m_Size;
+        size_t newSize = m_Size + otherSize;
 
-        if(!m_CanModify || m_Size >= m_Capacity || !m_Data){
+        if(!m_CanModify || newSize >= m_Capacity || !m_Data){
             char* data = new char[newSize];
             memcpy(data, m_Data, m_Size);
-            Free();
+            memcpy(data + m_Size, buffer.GetData(), otherSize);
+            Delete();
             m_Data = data;
+            m_Size = newSize;
             m_Capacity = m_Size;
             m_CanFree = true;
             m_CanModify = true;
@@ -523,8 +526,7 @@ public:
         while(true){
             if(str[i] == '\0')return true;
             if(at >= m_Size)return false;
-            if(m_Data[at] != str[i])return false;
-            at++;
+            if(m_Data[at++] != str[i])return false;
         }
 
         return true;
@@ -542,7 +544,7 @@ public:
         return true;
     }
     bool StartsWith(const char* str, size_t len) const HBUFF_NOEXCEPT{
-        size_t i = 0, strLen = len;
+        size_t i = 0;
 
         while(true){
             if(str[i] == '\0')return true;
