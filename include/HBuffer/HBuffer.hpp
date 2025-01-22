@@ -685,6 +685,16 @@ public:
         if(at >= m_Size)return;
         memcpy(dest, m_Data + at, len);
     }
+
+    /// @brief Reverses the data inside the array from 0-m_Size. Turns data at 0 into data at m_Size and data at m_Size into data at 0
+    void Reverse() HBUFF_NOEXCEPT{
+        for(size_t i = 0; i < m_Size; i++){
+            size_t reverseIndex = m_Size - i - 1;
+            char reverseData = m_Data[reverseIndex];
+            m_Data[reverseIndex] = m_Data[i];
+            m_Data[i] = reverseData;
+        }
+    }
 public:
     /// @brief if data is not null returns that data if it is null we return a non allocated "" literal
     const char* GetCStr() const HBUFF_NOEXCEPT{
