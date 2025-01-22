@@ -67,7 +67,7 @@ public:
         }
         memcpy(str + buff1FillSize, str2 + (std::max(pos, len1) - len1), std::min(len - buff1FillSize, len2 - pos - buff1FillSize));
         memset(str + len, '\0', 1);
-        return HBuffer(str, len, true);
+        return HBuffer(str, len, true, true);
     }
     
     HBuffer SubBuffer(size_t pos, size_t len) const HBUFF_NOEXCEPT{
@@ -93,7 +93,7 @@ public:
             memcpy(str, str1 + pos, buff1FillSize);
         }
         memcpy(str + buff1FillSize, str2 + (std::max(pos, len1) - len1), std::min(len - buff1FillSize, len2 - pos - buff1FillSize));
-        return HBuffer(str, len, true);
+        return HBuffer(str, len, true, true);
     }
 public:
     bool StartsWith(size_t at, const char* str) const HBUFF_NOEXCEPT{
