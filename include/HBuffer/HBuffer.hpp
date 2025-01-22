@@ -673,6 +673,9 @@ public:
         return 0;
     }
 
+    void Memset(char byte, size_t len) HBUFF_NOEXCEPT{
+        memset(m_Data, byte, len);
+    }
     /// @brief Copies contents of buffer into param dest for len bytes
     void Memcpy(void* dest, size_t len) const HBUFF_NOEXCEPT{
         memcpy(dest, m_Data, len);
