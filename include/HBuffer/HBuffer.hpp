@@ -294,6 +294,22 @@ public:
         m_Size = newSize;
     }
 
+    void Append(char c) HBUFF_NOEXCEPT{
+        size_t newSize = m_Size + 1;
+
+        if(!m_CanModify || newSize >= m_Capacity || !m_Data){
+            char* data = new char[newSize];
+            memcpy(data, m_Data, m_Size);
+            Delete();
+            m_Capacity = newSize;
+            m_Data = data;
+            m_CanFree = true;
+            m_CanModify = true;
+        }
+        memset(m_Data + m_Size, c, 1);
+        m_Size = newSize;
+    }
+
     /// @brief allocates a substring of buffer starting at param at with a length of len.
     /// @param at the location in the buffer that will start filling up the substring
     /// @param len the amount of characters to copy to new buffer. If -1 than whole buffer else caps out on buffer
