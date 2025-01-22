@@ -294,12 +294,48 @@ public:
         m_Size = newSize;
     }
 
+    void Append(const char* str) HBUFF_NOEXCEPT{
+        size_t strLen = strlen(str);
+        size_t newSize = m_Size + strLen;
+
+        if(!m_CanModify || newSize >= m_Capacity || !m_Data){
+            char* data = new char[newSize];
+            memcpy(data, m_Data, m_Size);
+            Delete();
+            m_Data = data;
+            m_CanFree = true;
+            m_CanModify = true;
+            m_Capacity = newSize;
+        }
+
+        memcpy(m_Data + m_Size, str, strLen);
+        m_Size = newSize;
+    }
+
     void Append(char c) HBUFF_NOEXCEPT{
         size_t newSize = m_Size + 1;
 
         if(!m_CanModify || newSize >= m_Capacity || !m_Data){
             char* data = new char[newSize];
             memcpy(data, m_Data, m_Size);
+            Delete();
+            m_Capacity = newSize;
+            m_Data = data;
+            m_CanFree = true;
+            m_CanModify = true;
+        }
+        memset(m_Data + m_Size, c, 1);
+        m_Size = newSize;
+    }
+
+    /// @brief Appends a single character to the buffer and also makes sure there is a null terminator
+    void AppendString(char c) HBUFF_NOEXCEPT{
+        size_t newSize = m_Size + 1;
+
+        if(!m_CanModify || newSize + 1 >= m_Capacity || !m_Data){
+            char* data = new char[newSize + 1];
+            memcpy(data, m_Data, m_Size);
+            memset(data, newSize, '\0');
             Delete();
             m_Capacity = newSize;
             m_Data = data;
