@@ -311,6 +311,22 @@ public:
         memcpy(m_Data + m_Size, str, strLen);
         m_Size = newSize;
     }
+    void Append(const char* str, size_t strLen) HBUFF_NOEXCEPT{
+        size_t newSize = m_Size + strLen;
+
+        if(!m_CanModify || newSize >= m_Capacity || !m_Data){
+            char* data = new char[newSize];
+            memcpy(data, m_Data, m_Size);
+            Delete();
+            m_Data = data;
+            m_CanFree = true;
+            m_CanModify = true;
+            m_Capacity = newSize;
+        }
+
+        memcpy(m_Data + m_Size, str, strLen);
+        m_Size = newSize;
+    }
 
     void Append(char c) HBUFF_NOEXCEPT{
         size_t newSize = m_Size + 1;
@@ -328,6 +344,46 @@ public:
         m_Size = newSize;
     }
 
+    /// @brief Appends a const char* with a specific length and makes sure buffer ends with a null terminator.
+    void AppendString(const char* str) HBUFF_NOEXCEPT{
+        size_t strLen = strlen(str);
+        size_t newSize = m_Size + strLen;
+
+        if(!m_CanModify || newSize + 1>= m_Capacity || !m_Data){
+            char* data = new char[newSize + 1];
+            memcpy(data, m_Data, m_Size);
+            Delete();
+            m_Data = data;
+            m_CanFree = true;
+            m_CanModify = true;
+            m_Capacity = newSize + 1;
+        }
+
+        memcpy(m_Data + m_Size, str, strLen);
+        memset(m_Data + newSize, '\0', 1);
+        m_Size = newSize;
+    }
+
+    /// @brief Appends a const char* with a specific length and makes sure buffer ends with a null terminator.
+    void AppendString(const char* str, size_t strLen) HBUFF_NOEXCEPT{
+        size_t newSize = m_Size + strLen;
+
+        if(!m_CanModify || newSize + 1>= m_Capacity || !m_Data){
+            char* data = new char[newSize + 1];
+            memcpy(data, m_Data, m_Size);
+            Delete();
+            m_Data = data;
+            m_CanFree = true;
+            m_CanModify = true;
+            m_Capacity = newSize + 1;
+        }
+
+        memcpy(m_Data + m_Size, str, strLen);
+        memset(m_Data + newSize, '\0', 1);
+        m_Size = newSize;
+    }
+
+
     /// @brief Appends a single character to the buffer and also makes sure there is a null terminator
     void AppendString(char c) HBUFF_NOEXCEPT{
         size_t newSize = m_Size + 1;
@@ -335,14 +391,14 @@ public:
         if(!m_CanModify || newSize + 1 >= m_Capacity || !m_Data){
             char* data = new char[newSize + 1];
             memcpy(data, m_Data, m_Size);
-            memset(data, newSize, '\0');
             Delete();
-            m_Capacity = newSize;
+            m_Capacity = newSize + 1;
             m_Data = data;
             m_CanFree = true;
             m_CanModify = true;
         }
         memset(m_Data + m_Size, c, 1);
+        memset(m_Data + newSize, '\0', 1);
         m_Size = newSize;
     }
 
@@ -354,11 +410,8 @@ public:
         buffer.m_Capacity = std::min(len, m_Size);
         buffer.m_Data = new char[buffer.m_Capacity + 1];
 
-        size_t i = 0;
-        for(i = 0; i < buffer.m_Capacity; i++){
-            buffer.m_Data[i] = m_Data[at];
-            at++;
-        }
+        for(size_t i = 0; i < buffer.m_Capacity; i++)
+            buffer.m_Data[i] = m_Data[at++];
         buffer.m_Data[buffer.m_Capacity] = '\0';
         buffer.m_Size = i;
         buffer.m_CanFree = true;
