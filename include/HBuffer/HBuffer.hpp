@@ -719,7 +719,6 @@ public:
         m_CanFree = false;
         return *this;
     }*/
-    
     /// @brief Assigns the current buffers content as a copy of param right's data
     HBuffer& operator=(const HBuffer& right) HBUFF_NOEXCEPT{
         m_Size = right.m_Size;
@@ -806,3 +805,19 @@ private:
     bool m_CanFree = false;
     bool m_CanModify = false;
 };
+
+namespace std {
+    template<>
+    struct hash<HBuffer> {
+        std::size_t operator()(const HBuffer& buff) const noexcept{
+            std::size_t hash = 0;
+            std::size_t prime = 31; // A small prime number
+
+            char* data = buff.GetData();
+            for (size_t i = 0; i < buff.GetSize(); i++)
+                hash = hash * prime + data[i];
+
+            return hash;
+        }
+    }
+}
