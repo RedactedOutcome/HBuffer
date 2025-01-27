@@ -819,5 +819,5 @@ namespace std {
 
             return hash;
         }
-    }
+    };
 }
