@@ -173,10 +173,33 @@ public:
         return '\0';
     }
 
-    //Assign data to point to a string literal.
-    //TODO: maybe capacity
+    /// @brief returns a new HBuffer with an ascii encoded base 10 string
+    static HBuffer ToString(size_t number) HBUFF_NOEXCEPT{
+        HBuffer buffer;
+        buffer.Reserve(5);
+
+        while(number > 0){
+            buffer.Append((number % 10) + '0');
+            number /= 10;
+        }
+        buffer.Reverse();
+
+        return buffer;
+    }
 
 
+    /// @brief Assumes data in param buffer is a ascii encoded numerical base 10 string.
+    /// @param output a pointer to a size_t to store the result
+    static void StrictToNumber(const HBuffer& buffer, size_t* output) HBUFF_NOEXCEPT{
+        size_t number = 0;
+
+        for(size_t i = 0; i < buffer.GetSize(); i++){
+            number *= 10;
+            number += buffer.m_Data[i] - '0';
+        }
+
+        *output = number;
+    }
     /// @brief Makes buffer point to a null terminated string literal
     /// @param str the string to point to
     /// @param canFree do we own this data
