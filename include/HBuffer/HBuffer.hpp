@@ -64,10 +64,10 @@ public:
     ~HBuffer(){
     #ifdef HBUFFER_PRINT_DECONSTRUCTION_STATUS
         std::cout << "HBuffer Deconstructor Before Free" <<std::endl;
-        Free();
+        if(m_CanFree)delete m_Data;
         std::cout<< "HBuffer Deconstructor After Free" << std::endl;
     #else
-        Free();
+        if(m_CanFree)delete m_Data;
     #endif
     }
 
@@ -158,11 +158,7 @@ public:
         m_CanModify = true;
         m_Capacity = newSize;
     }
-    /*
-    /// @brief Retrieves the char at param i. Throws std::out_of_range if i is out of buffer range/size
-    char Get(size_t i) const HBUFF_NOEXCEPT;
-    */
-
+    
     /// @return returns the character at i
     char At(size_t i) const HBUFF_NOEXCEPT{
         return m_Data[i];
@@ -175,15 +171,30 @@ public:
 
     /// @brief returns a new HBuffer with an ascii encoded base 10 string
     static HBuffer ToString(size_t number) HBUFF_NOEXCEPT{
-        HBuffer buffer;
-        buffer.Reserve(5);
+        HBuffer buffer(new char[5], 5, true, true);
 
         while(number > 0){
-            buffer.Append((number % 10) + '0');
+            buffer.AppendString((number % 10) + '0');
             number /= 10;
         }
         buffer.Reverse();
 
+        return buffer;
+    }
+
+    static HBuffer ToString(float number) HBUFF_NOEXCEPT{
+        HBuffer buffer(new char[5], 5, true, true);
+        uint32_t bits = *reinterpret_cast<uint32_t*>(&number);
+        uint8_t sign = bits >> 31;
+        uint8_t exponent = ((bits >> 23) & 0xFF) - 127; // Bias correction for IEEE-754
+
+        if(sign == 1)buffer.AppendString('-');
+        if(exponent == 0 || exponent == 255){
+            buffer.AppendString("Inf");
+            return;
+        }
+        int mantissa = bits & 0x7FFFFF;
+        int pow10 = exponent * 30103 / 100000;
         return buffer;
     }
 
@@ -659,6 +670,17 @@ public:
 
         return true;
     }
+    bool StartsWith(size_t at, const char* str, size_t len) const HBUFF_NOEXCEPT{
+        size_t i = 0;
+
+        while(true){
+            if(str[i] == '\0')return true;
+            if(at >= m_Size)return false;
+            if(m_Data[at++] != str[i])return false;
+        }
+
+        return true;
+    }
     bool StartsWith(const char* str) const HBUFF_NOEXCEPT{
         size_t i = 0, strLen = strlen(str);
 
@@ -683,7 +705,8 @@ public:
 
         return true;
     }
-    
+
+    //TODO: POssible rename
     /// @return returns 0 if success return -1 if buffer is out of data and 1 if data doesnt match
     int StrXCmp(const char* str) const HBUFF_NOEXCEPT{
         size_t i = 0;
@@ -720,10 +743,7 @@ public:
     }
 public:
     /// @brief if data is not null returns that data if it is null we return a non allocated "" literal
-    const char* GetCStr() const HBUFF_NOEXCEPT{
-        if(m_Data)return m_Data;
-        return "";
-    }
+    const char* GetCStr() const HBUFF_NOEXCEPT{return m_Data ? m_Data : "";}
     /// @brief returns data ptr
     HBUFF_CONSTEXPR bool CanFree() const HBUFF_NOEXCEPT{return m_CanFree;}
     HBUFF_CONSTEXPR bool CanModify() const HBUFF_NOEXCEPT{return m_CanModify;}
@@ -742,6 +762,10 @@ public:
         m_CanFree = false;
         return *this;
     }*/
+
+    char& operator[](size_t at) HBUFF_NOEXCEPT{
+        return m_Data[at];
+    }
     /// @brief Assigns the current buffers content as a copy of param right's data
     HBuffer& operator=(const HBuffer& right) HBUFF_NOEXCEPT{
         m_Size = right.m_Size;
