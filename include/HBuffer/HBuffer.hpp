@@ -144,13 +144,14 @@ public:
     }
 
 
-    /// @brief Reserves the buffer to have atleast newSize bytes. Only reallocate if newSize >= capacity.Fills remaining space after size with ' ' and ends with a null terminator
+    /// @brief Reserves param newSize + 1 bytes in memory. With the additional byte being the null terminator.
     void ReserveString(size_t newSize) HBUFF_NOEXCEPT{
         if(newSize < m_Capacity)return;
-        char* data = new char[newSize + 1];
+        newSize++;
+        char* data = new char[newSize];
         memcpy(data, m_Data, m_Capacity);
-        memset(data + m_Capacity, ' ', newSize - m_Capacity);
-        memset(data, '\0', newSize);
+        //memset(data + newSize - 1, ' ', newSize - m_Capacity);
+        memset(data + newSize, '\0', newSize);
         if(m_CanFree)delete m_Data;
         m_Data = data;
         m_Capacity = newSize;
@@ -799,10 +800,45 @@ public:
     HBuffer& operator=(const char* right) HBUFF_NOEXCEPT{
         Free();
         m_Data = const_cast<char*>(right);
-        m_Capacity = strlen(right);
-        m_Size = m_Capacity;
+        m_Size = strlen(right);
+        m_Capacity = m_Size + 1;
         m_CanFree = false;
         m_CanModify = false;
+        return *this;
+    }
+
+    /// @brief appends data as ascii strings
+    HBuffer& operator+=(const char* right) HBUFF_NOEXCEPT{
+        size_t strLen = strlen(right);
+        size_t newSize = m_Size + strLen;
+
+        if(!m_CanFree || !m_CanModify || newSize >= m_Capacity){
+            char* data = new char[newSize];
+            memcpy(m_Data, data, m_Size);
+            Delete();
+            m_Capacity = newSize;
+        }
+        memcpy(m_Data + m_Size, right, strLen);
+        memset(m_Data, newSize-1,'\0');
+        m_Size = newSize;
+        return *this;
+    }
+    
+    /// @brief appends data as ascii strings
+    HBuffer& operator+=(const HBuffer& right) HBUFF_NOEXCEPT{
+        size_t strLen = right.GetSize();
+        size_t newSize = m_Size + strLen + 1;
+
+        if(!m_CanFree || !m_CanModify || newSize >= m_Capacity){
+            char* data = new char[newSize];
+            memcpy(m_Data, data, m_Size);
+            Delete();
+            m_Capacity = newSize;
+
+        }
+        memcpy(m_Data + m_Size, right.GetData(), strLen);
+        memset(m_Data, newSize-1,'\0');
+        m_Size = newSize;
         return *this;
     }
     /// @brief adds an offset to the vector. If owns data it frees and reallocates. If not then we just increment pointer and change size
