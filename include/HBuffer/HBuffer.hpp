@@ -23,14 +23,6 @@ public:
     /// @param canModify decides if the buffer can directly modify data or if it has to make a copy if it needs to edit data
     HBuffer(const char* str, size_t len, bool canFree, bool canModify)HBUFF_NOEXCEPT:m_Size(len), m_Data(const_cast<char*>(str)), m_Capacity(m_Size), m_CanFree(canFree), m_CanModify(canModify){}
     
-    /// @brief Makes data point to str and gives it a size/capacity to use depending on canModify. Will complete buffer if canFree is true
-    /// @param str 
-    /// @param len the amount of characters or size in the param str
-    /// @param the capacity of the buffer
-    /// @param canFree 
-    /// @param canModify decides if the buffer can directly modify data or if it has to make a copy if it needs to edit data
-    explicit HBuffer(char* str, size_t len, size_t capacity, bool canFree, bool canModify)HBUFF_NOEXCEPT:m_Size(len), m_Data(str), m_Capacity(capacity), m_CanFree(canFree), m_CanModify(canModify){}
-
     /// @brief Makes the buffer an exact non owning copy of param buffer
     /// @param buffer 
     HBuffer(const HBuffer& buffer)HBUFF_NOEXCEPT :m_Data(buffer.m_Data), m_Size(buffer.m_Size), m_Capacity(buffer.m_Capacity), m_CanFree(false), m_CanModify(buffer.m_CanModify){
@@ -117,7 +109,7 @@ public:
     void SetCanFree(bool value) HBUFF_NOEXCEPT{
         m_CanFree = value;
     }
-
+    
     /// @brief changes if we are allowed to modify the data or not. without nullptr checks
     void SetCanModify(bool canModify) HBUFF_NOEXCEPT{
         m_CanModify = canModify;
