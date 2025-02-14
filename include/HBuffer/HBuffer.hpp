@@ -906,3 +906,8 @@ namespace std {
         }
     };
 }
+
+std::ostream& operator<<(std::ostream& os, const HBuffer& buffer) {
+    os << buffer.GetCStr();
+    return os;
+}
