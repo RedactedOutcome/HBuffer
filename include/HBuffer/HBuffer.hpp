@@ -184,7 +184,9 @@ public:
     }
 
     static HBuffer ToString(float number) HBUFF_NOEXCEPT{
-        HBuffer buffer(new char[5], 5, true, true);
+        HBuffer buffer;
+        buffer.ReserveString(7);
+
         uint32_t bits = *reinterpret_cast<uint32_t*>(&number);
         uint8_t sign = bits >> 31;
         uint8_t exponent = ((bits >> 23) & 0xFF) - 127; // Bias correction for IEEE-754
@@ -192,7 +194,7 @@ public:
         if(sign == 1)buffer.AppendString('-');
         if(exponent == 0 || exponent == 255){
             buffer.AppendString("Inf");
-            return;
+            return buffer;
         }
         int mantissa = bits & 0x7FFFFF;
         int pow10 = exponent * 30103 / 100000;
