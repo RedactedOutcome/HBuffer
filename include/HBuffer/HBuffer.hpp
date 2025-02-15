@@ -179,7 +179,7 @@ public:
     }
 
     /// @brief Allocate a copy of data
-    static HBuffer Copy(const std::string& data) HBUFF_NOEXCEPT{
+    static HBuffer CreateCopy(const std::string& data) HBUFF_NOEXCEPT{
         size_t size = data.size();
         HBuffer buffer(new char[size + 1], size, size + 1, true, true);
 
