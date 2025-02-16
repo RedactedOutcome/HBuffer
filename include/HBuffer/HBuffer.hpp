@@ -189,7 +189,8 @@ public:
     }
     /// @brief returns a new HBuffer with an ascii encoded base 10 string
     static HBuffer ToString(size_t number) HBUFF_NOEXCEPT{
-        HBuffer buffer(new char[5], 5, true, true);
+        HBuffer buffer;
+        buffer.ReserveString(5);
 
         while(number > 0){
             buffer.AppendString((number % 10) + '0');
