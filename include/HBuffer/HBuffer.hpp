@@ -755,11 +755,11 @@ public:
 
     /// @brief Reverses the data inside the array from 0-m_Size. Turns data at 0 into data at m_Size and data at m_Size into data at 0
     void Reverse() HBUFF_NOEXCEPT{
-        for(size_t i = 0; i < m_Size; i++){
-            size_t reverseIndex = m_Size - i - 1;
-            char reverseData = m_Data[reverseIndex];
-            m_Data[reverseIndex] = m_Data[i];
-            m_Data[i] = reverseData;
+        for(size_t i = 0; i < m_Size / 2; i++){
+            size_t reverseIndex = m_Size - 1 - i;
+            char temp = m_Data[i];
+            m_Data[i] = m_Data[reverseIndex];
+            m_Data[reverseIndex] = temp;
         }
     }
 public:
