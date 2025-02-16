@@ -153,7 +153,7 @@ public:
 
 
     /// @brief Reserves param newSize + 1 bytes in memory. With the additional byte being the null terminator.
-    void ReserveString(size_t newSize) HBUFF_NOEXCEPT{
+    void ReserveString(size_t capacity) HBUFF_NOEXCEPT{
         capacity++;
         if(newSize < m_Capacity)return;
         char* data = new char[capacity];
