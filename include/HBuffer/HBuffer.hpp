@@ -154,18 +154,17 @@ public:
 
     /// @brief Reserves param newSize + 1 bytes in memory. With the additional byte being the null terminator.
     void ReserveString(size_t newSize) HBUFF_NOEXCEPT{
+        capacity++;
         if(newSize < m_Capacity)return;
-        newSize++;
-        char* data = new char[newSize];
-        memcpy(data, m_Data, m_Capacity);
-        //memset(data + newSize - 1, ' ', newSize - m_Capacity);
-        memset(data + newSize, '\0', newSize);
-        if(m_CanFree)delete m_Data;
+        char* data = new char[capacity];
+        memcpy(data, m_Data, m_Size);
+        memset(data+m_Size, '\0', 1);
+        memset(data+capacity - 1, '\0', 1);
+        Delete();
         m_Data = data;
-        m_Capacity = newSize;
-        m_CanFree = true;
+        m_Capacity = capacity;
         m_CanModify = true;
-        m_Capacity = newSize;
+        m_CanFree = true;
     }
     
     /// @return returns the character at i
