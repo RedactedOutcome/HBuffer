@@ -515,12 +515,12 @@ public:
     /// @param len the amount of characters to copy to new buffer. If -1 than whole buffer else caps out on buffer
     HBuffer SubString(size_t at, size_t len) const HBUFF_NOEXCEPT{
         HBuffer buffer;
-        buffer.m_Capacity = std::min(len, m_Size) + 1;
+        buffer.m_Size = std::min(len, m_Size);
+        buffer.m_Capacity = buffer.m_Size + 1;
         buffer.m_Data = new char[buffer.m_Capacity];
 
-        for(size_t i = 0; i < buffer.m_Capacity; i++)
+        for(size_t i = 0; i <= buffer.m_Size; i++)
             buffer.m_Data[i] = m_Data[at++];
-        buffer.m_Size = buffer.m_Capacity - 1;
         buffer.m_Data[buffer.m_Size] = '\0';
         buffer.m_CanFree = true;
         buffer.m_CanModify = true;
@@ -532,7 +532,8 @@ public:
     /// @param len the amount of characters to copy to new buffer. If -1 than whole buffer. Caps out on buffer size
     HBuffer SubBuffer(size_t at, size_t len) const HBUFF_NOEXCEPT{
         HBuffer buffer;
-        buffer.m_Capacity = std::min(len, m_Size);
+        buffer.m_Size = std::min(len, m_Size);
+        buffer.m_Capacity = buffer.m_Size + 1;
         buffer.m_Data = new char[buffer.m_Capacity];
 
         size_t i = 0;
@@ -540,7 +541,6 @@ public:
             buffer.m_Data[i] = m_Data[at];
             at++;
         }
-        buffer.m_Size = i;
         buffer.m_CanFree = true;
         buffer.m_CanModify = true;
         return buffer;
