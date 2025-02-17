@@ -328,23 +328,21 @@ public:
         food.Free();
     }
 
-    void Append(HBuffer& buffer) HBUFF_NOEXCEPT{
+    void Append(const HBuffer& buffer) HBUFF_NOEXCEPT{
         size_t otherSize = buffer.m_Size;
         size_t newSize = m_Size + otherSize;
 
         if(!m_CanModify || newSize > m_Capacity || !m_Data){
             char* data = new char[newSize];
             memcpy(data, m_Data, m_Size);
-            memcpy(data + m_Size, buffer.GetData(), otherSize);
             Delete();
             m_Data = data;
-            m_Size = newSize;
             m_Capacity = m_Size;
             m_CanFree = true;
             m_CanModify = true;
         }
 
-        memcpy(m_Data, m_Data + m_Size, buffer.m_Size);
+        memcpy(m_Data + m_Size, buffer.GetData(), otherSize);
         m_Size = newSize;
     }
 
@@ -412,6 +410,26 @@ public:
             m_CanModify = true;
         }
         memcpy(m_Data + m_Size, string.data(), strLen);
+        m_Size = newSize;
+    }
+
+    void AppendString(const HBuffer& buffer) HBUFF_NOEXCEPT{
+        size_t otherSize = buffer.m_Size;
+        size_t newSize = m_Size + otherSize;
+        size_t minCapacity = newSize + 1;
+
+        if(!m_CanModify || minCapacity > m_Capacity || !m_Data){
+            char* data = new char[minCapacity];
+            memcpy(data, m_Data, m_Size);
+            Delete();
+            m_Data = data;
+            m_Capacity = m_Size;
+            m_CanFree = true;
+            m_CanModify = true;
+        }
+
+        memcpy(m_Data + m_Size, buffer.GetData(), otherSize);
+        memset(m_Data + newSize, '\0', 1);
         m_Size = newSize;
     }
 
