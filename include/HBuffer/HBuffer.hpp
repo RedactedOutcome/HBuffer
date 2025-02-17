@@ -332,7 +332,7 @@ public:
         size_t otherSize = buffer.m_Size;
         size_t newSize = m_Size + otherSize;
 
-        if(!m_CanModify || newSize >= m_Capacity || !m_Data){
+        if(!m_CanModify || newSize > m_Capacity || !m_Data){
             char* data = new char[newSize];
             memcpy(data, m_Data, m_Size);
             memcpy(data + m_Size, buffer.GetData(), otherSize);
@@ -352,7 +352,7 @@ public:
         size_t strLen = strlen(str);
         size_t newSize = m_Size + strLen;
 
-        if(!m_CanModify || newSize >= m_Capacity || !m_Data){
+        if(!m_CanModify || newSize > m_Capacity || !m_Data){
             char* data = new char[newSize];
             memcpy(data, m_Data, m_Size);
             Delete();
@@ -368,7 +368,7 @@ public:
     void Append(const char* str, size_t strLen) HBUFF_NOEXCEPT{
         size_t newSize = m_Size + strLen;
 
-        if(!m_CanModify || newSize >= m_Capacity || !m_Data){
+        if(!m_CanModify || newSize > m_Capacity || !m_Data){
             char* data = new char[newSize];
             memcpy(data, m_Data, m_Size);
             Delete();
@@ -385,7 +385,7 @@ public:
     void Append(char c) HBUFF_NOEXCEPT{
         size_t newSize = m_Size + 1;
 
-        if(!m_CanModify || newSize >= m_Capacity || !m_Data){
+        if(!m_CanModify || newSize > m_Capacity || !m_Data){
             char* data = new char[newSize];
             memcpy(data, m_Data, m_Size);
             Delete();
@@ -398,19 +398,37 @@ public:
         m_Size = newSize;
     }
 
+    void Append(const std::string& string){
+        size_t strLen = string.size();
+        size_t newSize = strLen + m_Size;
+
+        if(!m_CanModify || newSize > m_Capacity || !m_Data){
+            char* data = new char[newSize];
+            memcpy(data, m_Data, m_Size);
+            Delete();
+            m_Data = data;
+            m_Capacity = newSize;
+            m_CanFree = true;
+            m_CanModify = true;
+        }
+        memcpy(m_Data + m_Size, string.data(), strLen);
+        m_Size = newSize;
+    }
+
     /// @brief Appends a const char* with a specific length and makes sure buffer ends with a null terminator.
     void AppendString(const char* str) HBUFF_NOEXCEPT{
         size_t strLen = strlen(str);
         size_t newSize = m_Size + strLen;
+        size_t minCapacity = newSize + 1;
 
-        if(!m_CanModify || newSize + 1>= m_Capacity || !m_Data){
-            char* data = new char[newSize + 1];
+        if(!m_CanModify || minCapacity > m_Capacity || !m_Data){
+            char* data = new char[minCapacity];
             memcpy(data, m_Data, m_Size);
             Delete();
             m_Data = data;
             m_CanFree = true;
             m_CanModify = true;
-            m_Capacity = newSize + 1;
+            m_Capacity = minCapacity;
         }
 
         memcpy(m_Data + m_Size, str, strLen);
@@ -421,35 +439,53 @@ public:
     /// @brief Appends a const char* with a specific length and makes sure buffer ends with a null terminator.
     void AppendString(const char* str, size_t strLen) HBUFF_NOEXCEPT{
         size_t newSize = m_Size + strLen;
+        size_t minCapacity = newSize + 1;
 
-        if(!m_CanModify || newSize + 1>= m_Capacity || !m_Data){
-            char* data = new char[newSize + 1];
+        if(!m_CanModify || minCapacity > m_Capacity || !m_Data){
+            char* data = new char[minCapacity];
             memcpy(data, m_Data, m_Size);
             Delete();
             m_Data = data;
             m_CanFree = true;
             m_CanModify = true;
-            m_Capacity = newSize + 1;
+            m_Capacity = minCapacity;
         }
 
         memcpy(m_Data + m_Size, str, strLen);
         memset(m_Data + newSize, '\0', 1);
         m_Size = newSize;
     }
+    
+    void AppendString(const std::string& string){
+        size_t strLen = string.size();
+        size_t newSize = strLen + m_Size;
+        size_t minCapacity = newSize + 1;
 
-
+        if(!m_CanModify || minCapacity > m_Capacity || !m_Data){
+            char* data = new char[minCapacity];
+            memcpy(data, m_Data, m_Size);
+            Delete();
+            m_Data = data;
+            m_Capacity = minCapacity;
+            m_CanFree = true;
+            m_CanModify = true;
+        }
+        memcpy(m_Data + m_Size, string.data(), strLen);
+        m_Size = newSize;
+    }
     /// @brief Appends a single character to the buffer and also makes sure there is a null terminator
     void AppendString(char c) HBUFF_NOEXCEPT{
         size_t newSize = m_Size + 1;
+        size_t minCapacity = newSize + 1;
 
-        if(!m_CanModify || newSize + 1 >= m_Capacity || !m_Data){
-            m_Capacity = newSize + 1;
-            char* data = new char[m_Capacity];
+        if(!m_CanModify || minCapacity> m_Capacity || !m_Data){
+            char* data = new char[minCapacity];
             memcpy(data, m_Data, m_Size);
             Delete();
             m_Data = data;
             m_CanFree = true;
             m_CanModify = true;
+            m_Capacity = minCapacity;
         }
         memset(m_Data + m_Size, c, 1);
         memset(m_Data + newSize, '\0', 1);
