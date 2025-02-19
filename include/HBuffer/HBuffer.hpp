@@ -182,8 +182,11 @@ public:
         size_t size = string.size();
         size_t newCapacity = size + 1;
         char* data = new char[newCapacity];
+        std::cout << "t1"<<std::endl;
         memcpy(data, string.data(), size);
+        std::cout << "t2"<<std::endl;
         memcpy(data + size, '\0', 1);
+        std::cout << "t3"<<std::endl;
         return HBuffer(data, size, newCapacity, true, true);
     }
     /// @brief returns a new HBuffer with an ascii encoded base 10 string
