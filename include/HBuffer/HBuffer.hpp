@@ -178,13 +178,13 @@ public:
     }
 
     /// @brief Allocate a copy of data
-    static HBuffer CreateCopy(const std::string& data) HBUFF_NOEXCEPT{
-        size_t size = data.size();
-        HBuffer buffer(new char[size + 1], size, size + 1, true, true);
-
-        memcpy(buffer.GetData(), data.data(), size);
-        memcpy(buffer.GetData() + size, '\0', 1);
-        return buffer;
+    static HBuffer CreateCopy(const std::string& string) HBUFF_NOEXCEPT{
+        size_t size = string.size();
+        size_t newCapacity = size + 1;
+        char* data = new char[newCapacity];
+        memcpy(data, string.data(), size);
+        memcpy(data + size, '\0', 1);
+        return HBuffer(data, size, newCapacity, true, true);
     }
     /// @brief returns a new HBuffer with an ascii encoded base 10 string
     static HBuffer ToString(size_t number) HBUFF_NOEXCEPT{
