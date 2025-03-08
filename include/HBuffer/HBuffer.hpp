@@ -932,9 +932,10 @@ public:
     }
     /// @brief compares if the data inside the buffers are strings and match
     HBUFF_CONSTEXPR bool operator==(const char* str)const HBUFF_NOEXCEPT{
-        size_t strLen = strlen(str);
+        size_t strLen = 0;
+        while(str[strLen] != '\0')strLen++;
         if(m_Size != strLen)return false;
-        
+
         for(size_t i = 0; i < m_Size; i++)
             if(m_Data[i] != str[i])return false;
         //Never getting called
