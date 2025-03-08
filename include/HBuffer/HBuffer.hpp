@@ -920,13 +920,10 @@ public:
 
     /// @brief compares if the data inside the buffer matches and not the places in memory.
     HBUFF_CONSTEXPR bool operator==(const HBuffer& right)const HBUFF_NOEXCEPT{
-        //if(m_Data != right.m_Data)return false;
-        //if(m_Size != right.m_Size)return false;
-        //for(size_t i = 0; i < m_Size; i++)
-        //    if(m_Data[i] != right.m_Data[i])return false;
-        //return true;
         if(m_Size != right.m_Size)return false;
-        if(!m_Data || !right.m_Data)return false;
+
+        //Assuming if it has a size it has valid memory if not then the user created the buffer wrong
+        //if(!m_Data || !right.m_Data)return false;
 
         const char* other = right.m_Data;
         for(size_t i = 0; i < m_Size; i++)
@@ -935,12 +932,11 @@ public:
     }
     /// @brief compares if the data inside the buffers are strings and match
     HBUFF_CONSTEXPR bool operator==(const char* str)const HBUFF_NOEXCEPT{
-        size_t i = 0;
-        while(true){
-            char c = m_Data[i];
-            if(c != str[i++])return false;
-            if(c == '\0')return true;
-        }
+        size_t strLen = strlen(str);
+        if(m_Size != strLen)return false;
+        
+        for(size_t i = 0; i < m_Size; i++)
+            if(m_Data[i] != str[i])return false;
         //Never getting called
         return true;
     }
