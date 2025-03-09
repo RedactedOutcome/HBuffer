@@ -7,7 +7,7 @@ class HBuffer{
 public:
     friend class HBufferJoin;
     /// @brief Initializes HBuffer to point to nothing and own nothing
-    HBuffer()HBUFF_NOndXCEPT:m_Data(nullptr), m_Size(0), m_Capacity(0), m_CanFree(false), m_CanModify(false){}
+    HBuffer()HBUFF_NOEXCEPT:m_Data(nullptr), m_Size(0), m_Capacity(0), m_CanFree(false), m_CanModify(false){}
     /// @brief Points data to str and allows you to decide if that data should be modified or not
     /// @param str the string literal to point to
     /// @param canFree gives ownership to buffer
