@@ -815,6 +815,12 @@ public:
             m_Data[reverseIndex] = temp;
         }
     }
+
+    HBuffer GetSafeString() const HBUFF_NOEXCEPT{
+        HBuffer buff;
+        buff.AppendString(*this);
+        return buff;
+    }
 public:
     /// @brief if data is not null returns that data if it is null we return a non allocated "" literal
     const char* GetCStr() const HBUFF_NOEXCEPT{return m_Data ? m_Data : "";}
