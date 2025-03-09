@@ -50,8 +50,8 @@ public:
     /// @brief sets buffer as non owning view of string literal
     HBuffer(const char* str) HBUFF_NOEXCEPT{
         m_Data = const_cast<char*>(str);
-        m_Capacity = strlen(str);
-        m_Size = m_Capacity;
+        m_Size = strlen(str);
+        m_Capacity = m_Size + 1;
         m_CanFree = false;
         m_CanModify = false;
     }
