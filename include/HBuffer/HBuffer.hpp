@@ -167,7 +167,7 @@ public:
         m_CanFree = true;
     }
     
-    /// @return returns the character at i
+    /// @return returns the character at i without safety checks
     char At(size_t i) const HBUFF_NOEXCEPT{
         return m_Data[i];
     }
