@@ -842,19 +842,12 @@ public:
     }
     /// @brief Assigns the current buffers content as a copy of param right's data
     HBuffer& operator=(const HBuffer& right) HBUFF_NOEXCEPT{
+        Free();
+        m_Data = right.m_Data;
         m_Size = right.m_Size;
-        if(!m_Data || !m_CanModify || m_Size >= m_Capacity){
-            Delete();
-            m_Capacity = m_Size;
-            char* data = new char[m_Capacity];
-            memcpy(data, right.m_Data, m_Capacity);
-            m_Data = data;
-            m_CanFree = true;
-            m_CanModify = true;
-            return *this;
-        }
-        //Copy data into buff
-        memcpy(m_Data, right.m_Data, m_Size);
+        m_Capacity = right.m_Capacity;
+        m_CanModify = right.m_CanModify;
+        m_CanFree = false;
         return *this;
     }
     
