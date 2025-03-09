@@ -13,7 +13,7 @@ public:
     /// @param canFree gives ownership to buffer
     /// @param canModify decides if buffer is allowed to modify data
     HBuffer(const char* str, bool canFree, bool canModify)HBUFF_NOEXCEPT
-        : m_Size(strlen(str)), m_Capacity(m_Size), m_Data(const_cast<char*>(str)), m_CanFree(canFree), m_CanModify(canModify){}
+        : m_Size(strlen(str)), m_Capacity(m_Size + 1), m_Data(const_cast<char*>(str)), m_CanFree(canFree), m_CanModify(canModify){}
     
     
     /// @brief Makes data point to str and gives it a size/capacity to use depending on canModify. Will complete buffer if canFree is true
@@ -21,7 +21,7 @@ public:
     /// @param len the amount of characters or size in the param str
     /// @param canFree 
     /// @param canModify decides if the buffer can directly modify data or if it has to make a copy if it needs to edit data
-    HBuffer(const char* str, size_t len, bool canFree, bool canModify)HBUFF_NOEXCEPT:m_Size(len), m_Data(const_cast<char*>(str)), m_Capacity(m_Size), m_CanFree(canFree), m_CanModify(canModify){}
+    HBuffer(const char* str, size_t len, bool canFree, bool canModify)HBUFF_NOEXCEPT:m_Size(len), m_Data(const_cast<char*>(str)), m_Capacity(m_Size + 1), m_CanFree(canFree), m_CanModify(canModify){}
     
     /// @brief Makes data point to str and gives it a size/capacity to use depending on canModify. Will complete buffer if canFree is true
     /// @param str 
