@@ -873,6 +873,19 @@ public:
         return *this;
     }
 
+    friend HBuffer operator+(const char* left, const HBuffer& right) noexcept{
+        size_t strLen = strlen(left);
+        if(strLen + right.m_Size < 1)return HBuffer();
+        HBuffer buffer;
+        size_t newSize = strLen + right.m_Size;
+        buffer.Reserve(newSize + 1);
+        buffer.SetSize(newSize);
+        char* data = buffer.GetData();
+        memcpy(data, left, strLen);
+        memcpy(data + strLen, right.m_Data, right.m_Size);
+        memset(data + newSize, '\0', 1);
+        return buffer;
+    }
     /// @brief appends data as ascii strings
     HBuffer& operator+=(const char* right) HBUFF_NOEXCEPT{
         size_t strLen = strlen(right);
