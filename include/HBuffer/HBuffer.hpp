@@ -7,7 +7,7 @@ class HBuffer{
 public:
     friend class HBufferJoin;
     /// @brief Initializes HBuffer to point to nothing and own nothing
-    HBuffer()HBUFF_NOEXCEPT:m_Data(nullptr), m_Size(0), m_Capacity(0), m_CanFree(false), m_CanModify(false){}
+    HBuffer()HBUFF_NOndXCEPT:m_Data(nullptr), m_Size(0), m_Capacity(0), m_CanFree(false), m_CanModify(false){}
     /// @brief Points data to str and allows you to decide if that data should be modified or not
     /// @param str the string literal to point to
     /// @param canFree gives ownership to buffer
@@ -783,20 +783,11 @@ public:
     /// @brief Checks if the buffer ends with a certain string excluding the null terminator.
     /// @return returns if the buffer ends with the c string. Returns true in anycase where the buffer has 0 bytes or the string has 0 bytes
     bool EndsWith(const char* str, size_t len) const HBUFF_NOEXCEPT{
-        if(m_Size == 0)return false;
-        size_t strAt = len;
-        if(strAt == 0)return true;
-        strAt--;
-        size_t i = m_Size - 1;
-
-        while(true){
-            if(str[strAt] != m_Data[i])return false;
-            if(strAt == 0)break;
-            if(i-- == 0)return false;
-            i--;
-            strAt--;
+        if(len > m_Size)return false;
+        for(size_t i = m_Size - len; i < m_Size; i++){
+            if(m_Data[i] != str[0])return false;
+            str++;
         }
-
         return true;
     }
     
