@@ -822,6 +822,8 @@ public:
         return buff;
     }
 
+
+    /// @brief Allocates a new c string on the heap with the data of the buffer followed by null terminator.
     const char* GetSafeCString() const HBUFF_NOEXCEPT{
         char* data = new char[m_Size + 1];
         memcpy(data, m_Data, m_Size);
