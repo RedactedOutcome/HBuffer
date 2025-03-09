@@ -794,20 +794,12 @@ public:
     /// @brief Checks if the buffer ends with a certain string excluding the null terminator.
     /// @return returns if the buffer ends with the c string. Returns true in anycase where the buffer has 0 bytes or the string has 0 bytes
     bool EndsWith(const char* str) const HBUFF_NOEXCEPT{
-        if(m_Size == 0)return false;
-        size_t strAt = strlen(str);
-        if(strAt == 0)return true;
-        strAt--;
-        size_t i = m_Size - 1;
-
-        while(true){
-            if(str[strAt] != m_Data[i])return false;
-            if(strAt == 0)break;
-            if(i-- == 0)return false;
-            i--;
-            strAt--;
+        size_t len = strlen(str);
+        if(len > m_Size)return false;
+        for(size_t i = m_Size - len; i < m_Size; i++){
+            if(m_Data[i] != str[0])return false;
+            str++;
         }
-
         return true;
     }
 
