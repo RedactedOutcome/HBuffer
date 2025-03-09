@@ -843,12 +843,22 @@ public:
     }
 
 
-    /// @brief Allocates a new c string on the heap with the data of the buffer followed by null terminator.
-    const char* GetSafeCString() const HBUFF_NOEXCEPT{
+    /// @brief Allocates a new c string on the heap with the data of the buffer followed by null terminator without modifying the current buffer.
+    /// @return if current buffer is not a c string or is too small to be one we allocate new data and return a new buffer. Else we return a view of the current one.
+    HBuffer GetSafeCString() const HBUFF_NOEXCEPT{
+        if(m_Capacity < 1 || m_Capacity == m_Size){
+            size_t newCapacity = m_Capacity + 1;
+            char* data = new char[newCapacity];
+            memcpy(data, m_Data, m_Size);
+            return HBuffer(data, m_Size, newCapacity, true, true);
+        }
+
+        return *this;
+        /*
         char* data = new char[m_Size + 1];
         memcpy(data, m_Data, m_Size);
         memset(data + m_Size, '\0', 1);
-        return data;
+        return data;*/
     }
 
     /// @brief Makes sure there is a null terminator at the end of the buffer and returns the buffers data. Might of just made this for nothing
