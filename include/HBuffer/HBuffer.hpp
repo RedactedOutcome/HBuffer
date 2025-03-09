@@ -821,6 +821,13 @@ public:
         buff.AppendString(*this);
         return buff;
     }
+
+    const char* GetSafeCString() const HBUFF_NOEXCEPT{
+        char* data = new char[m_Size + 1];
+        memcpy(data, m_Data, m_Size);
+        memset(data + m_Size, '\0', 1);
+        return data;
+    }
 public:
     /// @brief if data is not null returns that data if it is null we return a non allocated "" literal
     const char* GetCStr() const HBUFF_NOEXCEPT{return m_Data ? m_Data : "";}
