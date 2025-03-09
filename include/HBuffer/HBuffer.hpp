@@ -828,6 +828,22 @@ public:
         memset(data + m_Size, '\0', 1);
         return data;
     }
+
+    /// @brief Makes sure there is a null terminator at the end of the buffer and returns the buffers data. Might of just made this for nothing
+    const char* TurnToSafeCString() HBUFF_NOEXCEPT{
+        if(m_Capacity <= m_Size){
+            m_Capacity = m_Size + 1;
+            char* data = new char[m_Capacity];
+            memcpy(data, m_Data, m_Size);
+            Delete();
+            m_Data = data;
+            m_CanFree = true;
+            m_CanModify = true;
+        }
+
+        memset(m_Data + m_Size, '\0', 1);
+        return m_Data;
+    }
 public:
     /// @brief if data is not null returns that data if it is null we return a non allocated "" literal
     const char* GetCStr() const HBUFF_NOEXCEPT{return m_Data ? m_Data : "";}
