@@ -246,7 +246,7 @@ public:
 
     /// @brief Sets data to point at a null terminated string literal.
     /// @param str the string that the buffer points to
-    /// @param len the new length and capacity
+    /// @param len the new length and capacity in bytes
     /// @param canFree is this buffer owning this data
     /// @param canModify can we modify this data
     void Assign(const char* str, size_t len, bool canFree, bool canModify) HBUFF_NOEXCEPT{
@@ -254,6 +254,21 @@ public:
         m_Data = const_cast<char*>(str);
         m_Size = len;
         m_Capacity = len;
+        m_CanFree = canFree;
+        m_CanModify = canModify;
+    }
+
+    /// @brief Frees current data and assigns new data
+    /// @param data the new data to point to
+    /// @param len the buffers new length in bytes
+    /// @param capacity the buffers new capacity in bytes
+    /// @param canFree the buffers ability to free the data
+    /// @param canModify the buffers ability to modify its new data
+    void Assign(char* data, size_t len, size_t capacity, bool canFree, bool canModify) HBUFF_NOEXCEPT{
+        Free();
+        m_Data = data;
+        m_Size = len;
+        m_Capacity = capacity;
         m_CanFree = canFree;
         m_CanModify = canModify;
     }
