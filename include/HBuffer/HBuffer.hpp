@@ -541,6 +541,23 @@ public:
         buffer.m_CanModify = true;
         return buffer;
     }
+
+    /// @brief Allocates a new copy of the buffer up to the size of the buffer
+    HBuffer GetCopy() const HBUFF_NOEXCEPT{
+        HBuffer buff;
+        buff.Reserve(m_Size);
+        memcpy(buff.GetData(), m_Data, m_Size);
+        return buff;
+    }
+
+    /// @brief Allocates a new copy of the buffer up to the size of the buffer
+    HBuffer GetCopyString() const HBUFF_NOEXCEPT{
+        HBuffer buff;
+        buff.Reserve(m_Size + 1);
+        memcpy(buff.GetData(), m_Data, m_Size);
+        memset(buff.GetData() + m_Size, '\0', 1);
+        return buff;
+    }
     
     /// @brief sam as substring without null terminator. allocates a subbuffer of buffer starting at param at with a length of len.
     /// @param at the location in the buffer that will start filling up the substring
