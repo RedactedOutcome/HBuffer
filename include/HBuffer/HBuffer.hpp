@@ -553,6 +553,7 @@ public:
     /// @brief Allocates a new copy of the buffer up to the size of the buffer
     HBuffer GetCopyString() const HBUFF_NOEXCEPT{
         HBuffer buff;
+        buff.m_Size = m_Size;
         buff.Reserve(m_Size + 1);
         memcpy(buff.GetData(), m_Data, m_Size);
         memset(buff.GetData() + m_Size, '\0', 1);
