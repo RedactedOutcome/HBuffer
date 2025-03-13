@@ -771,7 +771,9 @@ public:
         while(true){
             if(str[i] == '\0')return true;
             if(at >= m_Size)return false;
-            if(m_Data[at++] != str[i])return false;
+            if(m_Data[at] != str[i])return false;
+            at++;
+            i++;
         }
 
         return true;
@@ -782,7 +784,9 @@ public:
         while(true){
             if(str[i] == '\0')return true;
             if(at >= m_Size)return false;
-            if(m_Data[at++] != str[i])return false;
+            if(m_Data[at] != str[i])return false;
+            at++;
+            i++;
         }
 
         return true;
