@@ -547,6 +547,7 @@ public:
         HBuffer buff;
         buff.Reserve(m_Size);
         memcpy(buff.GetData(), m_Data, m_Size);
+        buff.m_Size = m_Size;
         return buff;
     }
 
