@@ -561,9 +561,9 @@ public:
 
     /// @brief Create a new HBuffer that points to the same data as the current one but with an offset and or different size
     HBuffer SubPointer(size_t at, size_t len) const noexcept{
-        return HBuffer(m_Data + at, std::min(m_Size - at, m_Size - len), false, false);
+        return HBuffer(m_Data + at, std::min(m_Size - at, len), false, false);
     }
-    
+
     /// @brief sam as substring without null terminator. allocates a subbuffer of buffer starting at param at with a length of len.
     /// @param at the location in the buffer that will start filling up the substring
     /// @param len the amount of characters to copy to new buffer. If -1 than whole buffer. Caps out on buffer size
