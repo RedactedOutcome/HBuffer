@@ -569,6 +569,7 @@ public:
     /// @param len the amount of characters to copy to new buffer. If -1 than whole buffer. Caps out on buffer size
     HBuffer SubBuffer(size_t at, size_t len) const HBUFF_NOEXCEPT{
         HBuffer buffer;
+        //TODO: make sure at isnt greater than buffer size
         buffer.m_Size = std::min(m_Size - at, len);
         buffer.m_Capacity = buffer.m_Size + 1;
         buffer.m_Data = new char[buffer.m_Capacity];
