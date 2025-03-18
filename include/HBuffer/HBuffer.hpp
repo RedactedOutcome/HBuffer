@@ -638,6 +638,27 @@ public:
 
         memcpy(m_Data, const_cast<char*>(str), m_Size);
     }
+    /// @brief makes data at param at point to a copy of the null terminated string literal. Frees and reallocates if no data, cant modify, or strlen > capacity.
+    /// @param at the position in the buffer to copy the data to. Will reallocate if at is greater than capacity
+    /// @param str the null ternimated string literal we are copying
+    void Copy(size_t at, const char* str)HBUFF_NOEXCEPT{
+        size_t strLen = strlen(str);
+        size_t minimumSize = at + strLen;
+        if(minimumSize > m_Size || !m_CanModify || !m_Data){
+            m_Capacity = minimumSize;
+            char* data = new char[minimumSize];
+            memcpy(data, m_Data, at);
+            memcpy(data, str, strLen);
+            Delete();
+            m_Data = data;
+            m_Size = minimumSize;
+            m_CanModify = true;
+            m_CanFree = true;
+            return;
+        }
+
+        memcpy(m_Data + at, const_cast<char*>(str), strLen);
+    }
     /// @brief makes buffers data point to the content of the null terminated string.
     /// @param str the null terminated string literal to copy
     /// @param size the amount of bytes to copy
