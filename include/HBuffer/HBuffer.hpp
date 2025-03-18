@@ -638,7 +638,7 @@ public:
 
         memcpy(m_Data, const_cast<char*>(str), m_Size);
     }
-    /// @brief makes data point to a copy of the null terminated with a size of param size. Frees and reallocates if no self has no valid data ptr, cant modify self, or self size > capacity.
+    /// @brief makes buffers data point to the content of the null terminated string.
     /// @param str the null terminated string literal to copy
     /// @param size the amount of bytes to copy
     void Copy(char* str, size_t size)HBUFF_NOEXCEPT{
@@ -661,7 +661,7 @@ public:
 
         memcpy(m_Data, const_cast<char*>(str), m_Size);
     }
-    /// @brief Copies string into own buffer. Frees and reallocates if no self has no valid data ptr, cant modify self, or self size > capacity.
+    /// @brief makes the buffers content point to a copy of the contents inside the std::string
     /// @param string the string to make a copy of
     void Copy(const std::string& string)HBUFF_NOEXCEPT{
         m_Size = string.size();
