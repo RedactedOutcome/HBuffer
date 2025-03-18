@@ -124,7 +124,7 @@ public:
     }
 
     /// @brief Sets the size of the buffer and reallocates and changes data if param size > m_Capacity
-    /// @param size the size to set to
+    /// @param size the new buffer size in bytes
     void SetSize(size_t size) HBUFF_NOEXCEPT{
         if(size > m_Capacity){
             char* newData = new char[size];
@@ -137,6 +137,18 @@ public:
         m_Size = size;
     }
 
+
+    /// @brief assigns the size of the buffer to the param size without doing anything else. Doesnt check if its bigger than capacity or if we have valid data or anything.
+    /// @brief ;aram the new size in bytes
+    void AssignSize(size_t size) HBUFF_NOEXCEPT{
+        m_Size = size;
+    }
+
+    /// @brief strictly assigns the buffers capacity to the param capacity with no questions asked.
+    /// @param capacity the new capacity of the buffer in bytes
+    void AssignCapacity(size_t capacity) HBUFF_NOEXCEPT{
+        m_Capacity = capacity;
+    }
     /// @brief Reserves the buffer to be atleast param newSize bytes. If newSize <= capacity then no reallocation is done. Else we free/release data and reallocate
     /// @param newSize 
     void Reserve(size_t newSize) HBUFF_NOEXCEPT{
