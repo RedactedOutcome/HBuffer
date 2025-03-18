@@ -647,8 +647,8 @@ public:
         if(minimumSize > m_Size || !m_CanModify || !m_Data){
             m_Capacity = minimumSize;
             char* data = new char[minimumSize];
-            memcpy(data, m_Data, at);
-            memcpy(data, str, strLen);
+            memcpy(data, m_Data, m_Size);
+            memcpy(data + at, str, strLen);
             Delete();
             m_Data = data;
             m_Size = minimumSize;
@@ -667,8 +667,8 @@ public:
         if(minimumSize > m_Size || !m_CanModify || !m_Data){
             m_Capacity = minimumSize;
             char* data = new char[minimumSize];
-            memcpy(data, m_Data, at);
-            memcpy(data, str, len);
+            memcpy(data, m_Data, m_Size);
+            memcpy(data + at, str, len);
             Delete();
             m_Data = data;
             m_Size = minimumSize;
