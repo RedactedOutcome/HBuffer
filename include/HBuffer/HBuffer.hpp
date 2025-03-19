@@ -658,6 +658,7 @@ public:
         }
 
         memcpy(m_Data + at, const_cast<char*>(str), strLen);
+        m_Size = minimumSize > m_Size ? minimumSize : m_Size;
     }
     /// @brief makes data at param at point to a copy of the null terminated string literal. Frees and reallocates if no data, cant modify, or len > capacity.
     /// @param at the position in the buffer to copy the data to. Will reallocate if at is greater than capacity
@@ -678,6 +679,7 @@ public:
         }
         
         memcpy(m_Data + at, const_cast<char*>(str), len);
+        m_Size = minimumSize > m_Size ? minimumSize : m_Size;
     }
     /// @brief makes buffers data point to the content of the null terminated string.
     /// @param str the null terminated string literal to copy
