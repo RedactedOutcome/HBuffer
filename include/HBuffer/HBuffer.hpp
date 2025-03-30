@@ -1123,6 +1123,22 @@ public:
             if(m_Data[i] != other[i])return true;
         return false;
     }
+    /// @brief returns if the contents are not equal. If one of the buffers does not have data returns false; else returns if contents match.
+    HBUFF_CONSTEXPR bool operator!=(const char* right)const HBUFF_NOEXCEPT{
+        size_t strLen = 0;
+        while(str[strLen] != '\0')strLen++;
+        if(m_Size != strLen)return true;
+
+        for(size_t i = 0; i < m_Size; i++)
+            if(m_Data[i] != str[i])return true;
+            
+        return false;
+    }
+    /// @brief returns if the contents are not equal. If one of the buffers does not have data returns false; else returns if contents match.
+    HBUFF_CONSTEXPR bool operator!=(char c)const HBUFF_NOEXCEPT{
+        if(m_Size != 1)return true;
+        return m_Data[0] != c;
+    }
 private:
     char* m_Data = nullptr;
     size_t m_Size = 0;
