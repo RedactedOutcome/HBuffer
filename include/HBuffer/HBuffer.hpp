@@ -1105,8 +1105,13 @@ public:
 
         for(size_t i = 0; i < m_Size; i++)
             if(m_Data[i] != str[i])return false;
-        //Never getting called
+        
         return true;
+    }
+    /// @brief compares if the data inside the buffers are strings and match
+    HBUFF_CONSTEXPR bool operator==(char c)const HBUFF_NOEXCEPT{
+        if(m_Size != 1)return false;
+        return m_Data[0] == c;
     }
     /// @brief returns if the contents are not equal. If one of the buffers does not have data returns false; else returns if contents match.
     HBUFF_CONSTEXPR bool operator!=(const HBuffer& right)const HBUFF_NOEXCEPT{
