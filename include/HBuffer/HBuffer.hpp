@@ -1078,7 +1078,7 @@ public:
 
         }
         memcpy(m_Data + m_Size, right.GetData(), strLen);
-        memset(m_Data, newSize-1,'\0');
+        memset(m_Data, static_cast<int>(newSize-1),'\0');
         m_Size = newSize;
         return *this;
     }
