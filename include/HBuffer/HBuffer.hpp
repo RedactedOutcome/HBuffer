@@ -1057,9 +1057,10 @@ public:
             memcpy(m_Data, data, m_Size);
             Delete();
             m_Capacity = newSize;
+            m_Data = data;
         }
         memcpy(m_Data + m_Size, right, strLen);
-        memset(m_Data, newSize-1,'\0');
+        memset(m_Data, static_cast<int>(newSize-1),'\0');
         m_Size = newSize;
         return *this;
     }
