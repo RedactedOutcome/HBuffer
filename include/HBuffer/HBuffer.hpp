@@ -363,6 +363,7 @@ public:
             char* data = new char[newSize];
             memcpy(data, m_Data, m_Size);
             Delete();
+            m_Size = newSize;
             m_Data = data;
             m_Capacity = m_Size;
             m_CanFree = true;
