@@ -728,7 +728,7 @@ public:
     void Copy(const HBuffer& buff)HBUFF_NOEXCEPT{
         m_Size = buff.m_Size;
         if(m_Size < 1)return;
-        if(!m_Data || !m_CanModify || m_Size >= m_Capacity){
+        if(!m_Data || !m_CanModify || m_Size > m_Capacity){
             Delete();
             m_Capacity = m_Size;
             char* data = new char[m_Capacity];
