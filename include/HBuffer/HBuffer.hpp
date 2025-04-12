@@ -547,7 +547,7 @@ public:
         buffer.m_Capacity = buffer.m_Size + 1;
         buffer.m_Data = new char[buffer.m_Capacity];
 
-        for(size_t i = 0; i <= buffer.m_Size; i++)
+        for(size_t i = 0; i < buffer.m_Size; i++)
             buffer.m_Data[i] = m_Data[at++];
         buffer.m_Data[buffer.m_Size] = '\0';
         buffer.m_CanFree = true;
