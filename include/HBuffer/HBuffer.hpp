@@ -337,18 +337,17 @@ public:
         size_t newBuff1Size = (m_Size - std::min(from, m_Size));
         size_t newBuff2Size = food.m_Size - (from - std::min(from, m_Size));
         size_t newBuffSize = newBuff1Size + newBuff2Size;
-        
+
         if(newBuffSize < 1)return;
         if(newBuffSize > m_Capacity || !m_CanModify){
             m_Capacity = newBuffSize;
             char* newData = new char[newBuffSize];
-            memcpy(newData, m_Data + from, newBuff1Size);
             if(m_CanFree)delete m_Data;
             m_Data = newData;
             m_CanFree = true;
             m_CanModify = true;
-        }else
-            memcpy(m_Data, m_Data + from, newBuff1Size);
+        }
+        memcpy(m_Data, m_Data + from, newBuff1Size);
         
         m_Size = newBuffSize;
         memcpy(m_Data + newBuff1Size, food.m_Data + std::min(from - newBuff1Size, from), newBuff2Size);
