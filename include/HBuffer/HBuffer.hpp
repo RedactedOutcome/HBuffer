@@ -337,7 +337,7 @@ public:
         size_t newBuff1Size = (m_Size - std::min(from, m_Size));
         size_t newBuff2Size = food.m_Size - (from - std::min(from, m_Size));
         size_t newBuffSize = newBuff1Size + newBuff2Size;
-
+        
         if(newBuffSize < 1)return;
         if(newBuffSize > m_Capacity || !m_CanModify){
             m_Capacity = newBuffSize;
@@ -583,13 +583,11 @@ public:
         HBuffer buffer;
         //TODO: make sure at isnt greater than buffer size
         buffer.m_Size = std::min(m_Size - at, len);
-        buffer.m_Capacity = buffer.m_Size + 1;
+        buffer.m_Capacity = buffer.m_Size;
         buffer.m_Data = new char[buffer.m_Capacity];
 
-        size_t i = 0;
-        for(i = 0; i < buffer.m_Capacity; i++){
-            buffer.m_Data[i] = m_Data[at];
-            at++;
+        for(size_t i = 0; i < buffer.m_Size; i++){
+            buffer.m_Data[i] = m_Data[at++];
         }
         buffer.m_CanFree = true;
         buffer.m_CanModify = true;
