@@ -337,7 +337,7 @@ public:
         size_t newBuff1Size = (m_Size - std::min(from, m_Size));
         size_t newBuff2Size = food.m_Size - (from - std::min(from, m_Size));
         size_t newBuffSize = newBuff1Size + newBuff2Size;
-
+        
         if(newBuffSize < 1)return;
         if(newBuffSize > m_Capacity || !m_CanModify){
             m_Capacity = newBuffSize;
