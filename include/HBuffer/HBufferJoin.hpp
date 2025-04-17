@@ -53,12 +53,35 @@ public:
 
         if(pos >= totalLength)
             return HBuffer("", 0, 1, false, false);
-
-        len = std::min(totalLength, std::min(totalLength - pos, len));
+        size_t dataCountAfter = totalLength - pos;
+        len = std::min(totalLength, std::min(dataCountAfter, len));
         //Or maybe out of range exception
         if(len < 1)return HBuffer(nullptr, 0, false, false);
         char* str = new char[len + 1];
+        
+        size_t newLen1 = len1 - std::min(len1, pos);
+        size_t newLen1Difference = newLen1 - std::min(newLen1, newLen1 - len);
+        newLen1 -=newLen1Difference;
 
+        size_t len2Change = std::min(pos - std::min(pos, len1), len2);
+        len2Change = std::min(len2Change, std::min(dataCountAfter, len) - len1);
+        size_t newLen2 = newLen2 - len2Change;
+        size_t totalLen = newLen1 + newLen2;
+
+        size_t len2Difference = newLen2 - std::min(newLen2, len);
+        if(newLen1Difference > 0)newLen2 = 0;
+
+        std::cout << "Total Length : " << totalLength << " Data count after : " << dataCountAfter << " string len " << len <<std::endl;
+        std::cout << "New lens " << newLen1 << ", " << newLen2<<std::endl;
+        std::cout << "Copy1"<<std::endl;
+        memcpy(str, str1 + pos, newLen1);
+        std::cout << "Copy2"<<std::endl;
+        memcpy(str + newLen1, str2 + len2Change, newLen2);
+        std::cout << "Copy3"<<std::endl;
+        memset(str + len, '\0', 1);
+        std::cout << "Copy4"<<std::endl;
+
+        /*
         size_t newLen1 = len1 - std::min(len1, pos);
         size_t len2Change = std::min(pos - std::min(pos, len1), len2);
         size_t newLen2 = newLen2 - len2Change;
@@ -80,6 +103,8 @@ public:
         std::cout << "Copy3"<<std::endl;
         memset(str + len, '\0', 1);
         std::cout << "Copy4"<<std::endl;
+        */
+        
         /*
         if(pos < len1){
             //Use first buffer
