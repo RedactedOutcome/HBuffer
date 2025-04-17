@@ -333,15 +333,10 @@ public:
     }
     /// @param offset adds offset to buffer as if +=
     void Consume(size_t from, HBuffer& food) HBUFF_NOEXCEPT{
-        std::cout << "part 1 size " << GetSize() << " before " << SubString(0,-1).GetCStr()<<std::endl;
-        std::cout << "part 2 size " << food.GetSize() << " before " << food.SubString(0,-1).GetCStr()<<std::endl;
         size_t part1Size = (m_Size - std::min(from, m_Size));
         size_t part2Change = std::min(from - std::min(from, m_Size), food.m_Size);
         size_t part2Size = food.m_Size - part2Change;
         size_t newBuffSize = part1Size + part2Size;
-        std::cout << "m_Size : " << m_Size << " other m_Size : " << food.GetSize() << " From : " << from <<std::endl;
-        std::cout << "part1 new size : " << part1Size << " Part2Change : " << part2Change << " part2Size " << part2Size<<std::endl;
-        std::cout << "New Buff Size " << newBuffSize<<std::endl;
         /*
         if(part1Size < 1){
             //Can just free/release buffer at this point
@@ -360,7 +355,6 @@ public:
         if(newBuffSize > m_Capacity || !m_CanModify || !m_Data){
             m_Capacity = newBuffSize;
             char* newData = new char[newBuffSize];
-            std::cout << "New allocate"<<std::endl;
             memcpy(newData, m_Data + from, part1Size);
             if(m_CanFree)delete m_Data;
             m_Data = newData;
@@ -371,7 +365,6 @@ public:
             memcpy(m_Data, m_Data + from, part1Size);
         memcpy(m_Data + part1Size, food.m_Data + part2Change, part2Size);
         m_Size = newBuffSize;
-        std::cout << "after  " << SubString(0,-1).GetCStr()<<std::endl;
     }
 
     void Append(const HBuffer& buffer) HBUFF_NOEXCEPT{
