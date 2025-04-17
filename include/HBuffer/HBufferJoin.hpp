@@ -200,7 +200,57 @@ public:
     
     ///@brief opies from buffers into dest.
     ///@return returns 0 if success
-    int Memcpy(void* dest, size_t len) const HBUFF_NOEXCEPT{
+    int Memcpy(void* src, size_t len) const HBUFF_NOEXCEPT{
+        char* str1 = m_Buffer1.GetData();
+        char* str2 = m_Buffer2.GetData();
+        size_t len1 = m_Buffer1.GetSize();
+        size_t len2 = m_Buffer2.GetSize();
+        size_t i = 0, strPos = 0;
+        while(true){
+            if(strPos == len)return 0;
+            if(i == len1)break;
+            str1[i] = static_cast<const char*>(src)[i];
+            i++;
+            strPos++;
+        }
+
+        i=0;
+        while(true){
+            if(strPos == len)break;
+            if(i == len2)return 1;
+            str1[i] = static_cast<const char*>(src)[i];
+            i++;
+            strPos++;
+        }
+        return 0;
+    }
+    int Memcpy(void* src, size_t offset, size_t len) const HBUFF_NOEXCEPT{
+        char* str1 = m_Buffer1.GetData();
+        char* str2 = m_Buffer2.GetData();
+        size_t len1 = m_Buffer1.GetSize();
+        size_t len2 = m_Buffer2.GetSize();
+        size_t i = offset, strPos = 0;
+        while(true){
+            if(strPos == len)return 0;
+            if(i >= len1)break;
+            str1[i] = static_cast<const char*>(src)[i];
+            i++;
+            strPos++;
+        }
+
+        i-= len1;
+        while(true){
+            if(strPos == len)break;
+            if(i >= len2)return 1;
+            str1[i] = static_cast<const char*>(src)[i];
+            i++;
+            strPos++;
+        }
+        return 0;
+    }
+     ///@brief opies from buffers into dest.
+    ///@return returns 0 if success
+    int MemcpyTo(void* dest, size_t len) const HBUFF_NOEXCEPT{
         const char* str1 = m_Buffer1.GetData();
         const char* str2 = m_Buffer2.GetData();
         size_t len1 = m_Buffer1.GetSize();
@@ -224,7 +274,7 @@ public:
         }
         return 0;
     }
-    int Memcpy(void* dest, size_t offset, size_t len) const HBUFF_NOEXCEPT{
+    int MemcpyTo(void* dest, size_t offset, size_t len) const HBUFF_NOEXCEPT{
         const char* str1 = m_Buffer1.GetData();
         const char* str2 = m_Buffer2.GetData();
         size_t len1 = m_Buffer1.GetSize();

@@ -328,18 +328,36 @@ public:
     }
 
     /// @brief We will append the "foods" data to our buffer and the foods data will get released
-    void Consume(HBuffer& food) HBUFF_NOEXCEPT{
+    void Consume(const HBuffer& food) HBUFF_NOEXCEPT{
         Append(food);
-        food.Free();
     }
     /// @param offset adds offset to buffer as if +=
     void Consume(size_t from, HBuffer& food) HBUFF_NOEXCEPT{
-        size_t newBuff1Size = (m_Size - std::min(from, m_Size));
-        size_t newBuff2Size = food.m_Size - (from - std::min(from, m_Size));
-        size_t newBuffSize = newBuff1Size + newBuff2Size;
-        
-        if(newBuffSize < 1)return;
-        if(newBuffSize > m_Capacity || !m_CanModify){
+        std::cout << "part 1 before " << SubString(0,-1).GetCStr()<<std::endl;
+        std::cout << "part 2 before " << food.SubString(0,-1).GetCStr()<<std::endl;
+        size_t part1Size = (m_Size - std::min(from, m_Size));
+        size_t part2Change = std::min(from - std::min(from, m_Size), food.m_Size);
+        size_t part2Size = food.m_Size - part2Change;
+        size_t newBuffSize = part1Size + part2Size;
+        std::cout << "m_Size : " << m_Size << " other m_Size : " << food.GetSize() << " From : " << from <<std::endl;
+        std::cout << "part1 new size : " << part1Size << " Part2Change : " << part2Change << " part2Size " << part2Size<<std::endl;
+        std::cout << "New Buff Size " << newBuffSize<<std::endl;
+        /*
+        if(part1Size < 1){
+            //Can just free/release buffer at this point
+            Free();
+            *this = std::move(food);
+            if(m_CanFree){
+                ///Free self and create substring
+                *this = SubBuffer(part2Change, part2Size);
+                return;
+            }
+
+            *this = SubPointer(part2Change, part2Size);
+            return;
+        }
+        */
+        if(newBuffSize > m_Capacity || !m_CanModify || !m_Data){
             m_Capacity = newBuffSize;
             char* newData = new char[newBuffSize];
             if(m_CanFree)delete m_Data;
@@ -347,17 +365,16 @@ public:
             m_CanFree = true;
             m_CanModify = true;
         }
-        memcpy(m_Data, m_Data + from, newBuff1Size);
-        
+        memcpy(m_Data, m_Data + from, part1Size);
         m_Size = newBuffSize;
-        memcpy(m_Data + newBuff1Size, food.m_Data + std::min(from - newBuff1Size, from), newBuff2Size);
-        food.Free();
+        memcpy(m_Data + part1Size, food.m_Data + (from - part1Size), part2Size);
+        std::cout << "after  " << SubString(0,-1).GetCStr()<<std::endl;
     }
 
     void Append(const HBuffer& buffer) HBUFF_NOEXCEPT{
         size_t otherSize = buffer.m_Size;
         size_t newSize = m_Size + otherSize;
-
+        
         if(!m_CanModify || newSize > m_Capacity || !m_Data){
             char* data = new char[newSize];
             memcpy(data, m_Data, m_Size);
@@ -571,8 +588,9 @@ public:
     }
 
     /// @brief Create a new HBuffer that points to the same data as the current one but with an offset and or different size
-    HBuffer SubPointer(size_t at, size_t len) const noexcept{
-        return HBuffer(m_Data + at, std::min(m_Size - at, len), false, false);
+    /// @param allowModify a check to allow this subpointer to modify data as long as the main buffer also can modify this data
+    HBuffer SubPointer(size_t at, size_t len, bool allowModify = true) const noexcept{
+        return HBuffer(m_Data + at, std::min(m_Size - at, len), false, allowModify && m_CanModify);
     }
 
     /// @brief sam as substring without null terminator. allocates a subbuffer of buffer starting at param at with a length of len.
@@ -912,15 +930,15 @@ public:
 
     void Memset(char byte, size_t len) HBUFF_NOEXCEPT{
         memset(m_Data, byte, len);
+        m_Size = len;
     }
     /// @brief Copies contents of buffer into param dest for len bytes
-    void Memcpy(void* dest, size_t len) const HBUFF_NOEXCEPT{
-        memcpy(dest, m_Data, len);
+    void Memcpy(void* src, size_t len) const HBUFF_NOEXCEPT{
+        memcpy(m_Data, src, len);
     }
     /// @brief Attempts to copy contents of buffer from at into dest for len bytes
-    void Memcpy(void* dest, size_t at, size_t len) const HBUFF_NOEXCEPT{
-        if(at >= m_Size)return;
-        memcpy(dest, m_Data + at, len);
+    void Memcpy(void* src, size_t at, size_t len) const HBUFF_NOEXCEPT{
+        memcpy(m_Data, reinterpret_cast<void*>(reinterpret_cast<size_t>(src) + at), len);
     }
 
     /// @brief Reverses the data inside the array from 0-m_Size. Turns data at 0 into data at m_Size and data at m_Size into data at 0
