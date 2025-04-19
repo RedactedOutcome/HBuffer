@@ -150,31 +150,30 @@ public:
         m_Capacity = capacity;
     }
     /// @brief Reserves the buffer to be atleast param newSize bytes. If newSize <= capacity then no reallocation is done. Else we free/release data and reallocate
-    /// @param newSize 
-    void Reserve(size_t newSize) HBUFF_NOEXCEPT{
-        if(newSize <= m_Capacity)return;
-        char* data = new char[newSize];
-        memcpy(data, m_Data, m_Capacity);
+    /// @param newCapacity the new capacity of the buffer. Only reallocates if newCapacity > m_Capacity 
+    void Reserve(size_t newCapacity) HBUFF_NOEXCEPT{
+        if(newCapacity <= m_Capacity)return;
+
+        char* data = new char[newCapacity];
+        memcpy(data, m_Data, m_Size);
         if(m_CanFree)delete m_Data;
         m_Data = data;
-        m_Capacity = newSize;
+        m_Capacity = newCapacity;
         m_CanFree = true;
         m_CanModify = true;
-        m_Capacity = newSize;
     }
 
 
-    /// @brief Reserves param newSize + 1 bytes in memory. With the additional byte being the null terminator.
-    void ReserveString(size_t capacity) HBUFF_NOEXCEPT{
-        capacity++;
-        if(capacity < m_Capacity)return;
-        char* data = new char[capacity];
+    /// @brief Reserves param newCapacity + 1 bytes in memory. With the additional byte being the null terminator.
+    void ReserveString(size_t newCapacity) HBUFF_NOEXCEPT{
+        newCapacity++;
+        if(newCapacity < m_Capacity)return;
+        m_Capacity = newCapacity;
+        char* data = new char[m_Capacity];
         memcpy(data, m_Data, m_Size);
-        memset(data+m_Size, '\0', 1);
-        memset(data+capacity - 1, '\0', 1);
-        Delete();
+        memset(data + m_Capacity - 1, '\0', 1);
+        if(m_CanFree)delete m_Data;
         m_Data = data;
-        m_Capacity = capacity;
         m_CanModify = true;
         m_CanFree = true;
     }
@@ -331,39 +330,39 @@ public:
     void Consume(const HBuffer& food) HBUFF_NOEXCEPT{
         Append(food);
     }
-    /// @param offset adds offset to buffer as if +=
+    /// @brief appends other buffers data ontop of current buffer and jumps to from. for example Consume(2, "Hello") if buffer is currently empty then new buffer will be "ello", else it will be buff1 + buff2 with the buffer starting at byte 2
+    /// @param from how much bytes to consume. then filled with remaining of current buffer then appends the food
     void Consume(size_t from, HBuffer& food) HBUFF_NOEXCEPT{
-        size_t part1Size = (m_Size - std::min(from, m_Size));
-        size_t part2Change = std::min(from - std::min(from, m_Size), food.m_Size);
-        size_t part2Size = food.m_Size - part2Change;
-        size_t newBuffSize = part1Size + part2Size;
-        /*
-        if(part1Size < 1){
-            //Can just free/release buffer at this point
-            Free();
-            *this = std::move(food);
-            if(m_CanFree){
-                ///Free self and create substring
-                *this = SubBuffer(part2Change, part2Size);
-                return;
-            }
+        //Part1 size - 30
+        //Part2 size - 50
+        //Total size - 80
+        //Part1 Change - 0
+        //From - 29
+        //Desired new size - 80
+        size_t otherSize = food.m_Size;
+        size_t totalSize = m_Size + otherSize;
 
-            *this = SubPointer(part2Change, part2Size);
-            return;
-        }
-        */
+        size_t part1Change = std::min(from, m_Size);
+        size_t newPart1Size = (m_Size - part1Change);
+        size_t part2Change = std::min(from <= m_Size ? 0 : from - m_Size, otherSize);
+        size_t newPart2Size = otherSize - part2Change;
+        size_t newBuffSize = newPart1Size + newPart2Size;
+        
+        std::cout << "Part1 Size: " << m_Size << " Part2 Size: " << otherSize << std::endl;
+        std::cout << "NewPart1 Size: " << newPart1Size << " New Part2Change: " << part2Change << " New Part2 Size: " << newPart2Size<<std::endl;
+        std::cout << "From: " << from <<  "New buff size " << newBuffSize<<std::endl;
         if(newBuffSize > m_Capacity || !m_CanModify || !m_Data){
             m_Capacity = newBuffSize;
             char* newData = new char[newBuffSize];
-            memcpy(newData, m_Data + from, part1Size);
+            memcpy(newData, m_Data + from, newPart1Size);
             if(m_CanFree)delete m_Data;
             m_Data = newData;
             m_CanFree = true;
             m_CanModify = true;
         }
         else
-            memcpy(m_Data, m_Data + from, part1Size);
-        memcpy(m_Data + part1Size, food.m_Data + part2Change, part2Size);
+            memcpy(m_Data, m_Data + from, newPart1Size);
+        memcpy(m_Data + newPart1Size, food.m_Data + part2Change, newPart2Size);
         m_Size = newBuffSize;
     }
 
@@ -576,10 +575,8 @@ public:
     /// @brief Allocates a new copy of the buffer up to the size of the buffer
     HBuffer GetCopyString() const HBUFF_NOEXCEPT{
         HBuffer buff;
-        buff.m_Size = m_Size;
-        buff.Reserve(m_Size + 1);
-        memcpy(buff.GetData(), m_Data, m_Size);
-        memset(buff.GetData() + m_Size, '\0', 1);
+        buff.ReserveString(m_Size);
+        buff.Copy(*this);
         return buff;
     }
 

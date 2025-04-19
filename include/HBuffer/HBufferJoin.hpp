@@ -124,8 +124,8 @@ public:
         return true;
     }
     bool StartsWith(size_t at, const char* str, size_t len) const HBUFF_NOEXCEPT{
-        const char* str1 = m_Buffer1.GetData();
-        const char* str2 = m_Buffer2.GetData();
+        char* str1 = m_Buffer1.GetData();
+        char* str2 = m_Buffer2.GetData();
         size_t len1 = m_Buffer1.GetSize();
         size_t len2 = m_Buffer2.GetSize();
         size_t strPos = 0;
@@ -150,8 +150,8 @@ public:
     bool StartsWith(const char* str) const HBUFF_NOEXCEPT{
         size_t len = strlen(str);
 
-        const char* str1 = m_Buffer1.GetData();
-        const char* str2 = m_Buffer2.GetData();
+        char* str1 = m_Buffer1.GetData();
+        char* str2 = m_Buffer2.GetData();
         size_t len1 = m_Buffer1.GetSize();
         size_t len2 = m_Buffer2.GetSize();
         size_t i = 0, strPos = 0;
