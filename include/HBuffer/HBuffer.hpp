@@ -572,7 +572,7 @@ public:
         return HBuffer(data, m_Size, true, true);
     }
 
-    /// @brief Allocates a new copy of the buffer up to the size of the buffer
+    /// @brief Allocates a copy of the buffer with a null terminator
     HBuffer GetCopyString() const HBUFF_NOEXCEPT{
         HBuffer buff;
         buff.ReserveString(m_Size);
