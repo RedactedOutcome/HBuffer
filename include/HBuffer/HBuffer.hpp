@@ -188,6 +188,19 @@ public:
         return '\0';
     }
 
+    /// @brief returns the character at param at.
+    /// @param status true if success, false if failed to retrieve
+    /// @param at the position in the buffer to retrieve the byte from
+    char Retrieve(bool& status, size_t at) const noexcept{
+        if(at > m_Size){
+            status = false;
+            return 0;
+        }
+
+        status = true;
+        return m_Data[at];
+    }
+
     /// @brief Allocate a copy of data
     static HBuffer CreateCopy(const std::string& string) HBUFF_NOEXCEPT{
         size_t size = string.size();
