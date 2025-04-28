@@ -333,6 +333,7 @@ public:
     /// @brief appends other buffers data ontop of current buffer and jumps to from. for example Consume(2, "Hello") if buffer is currently empty then new buffer will be "ello", else it will be buff1 + buff2 with the buffer starting at byte 2
     /// @param from how much bytes to consume. then filled with remaining of current buffer then appends the food
     void Consume(size_t from, HBuffer& food) HBUFF_NOEXCEPT{
+        ///TODO: might sometime work
         //Part1 size - 30
         //Part2 size - 50
         //Total size - 80
@@ -348,9 +349,6 @@ public:
         size_t newPart2Size = otherSize - part2Change;
         size_t newBuffSize = newPart1Size + newPart2Size;
         
-        std::cout << "Part1 Size: " << m_Size << " Part2 Size: " << otherSize << std::endl;
-        std::cout << "NewPart1 Size: " << newPart1Size << " New Part2Change: " << part2Change << " New Part2 Size: " << newPart2Size<<std::endl;
-        std::cout << "From: " << from <<  "New buff size " << newBuffSize<<std::endl;
         if(newBuffSize > m_Capacity || !m_CanModify || !m_Data){
             m_Capacity = newBuffSize;
             char* newData = new char[newBuffSize];
@@ -364,6 +362,73 @@ public:
             memcpy(m_Data, m_Data + from, newPart1Size);
         memcpy(m_Data + newPart1Size, food.m_Data + part2Change, newPart2Size);
         m_Size = newBuffSize;
+    }
+    
+
+    /// @brief Inserts c into the buffer at param at.
+    /// @param at the position to insert the char at. If we cant access the buffer or at >= m_Capacity we reallocate and the new buffers size is at + 1.
+    /// @param c the byte to insert at c
+    void InsertInt8At(size_t at, int8_t c)HBUFF_NOEXCEPT{
+        if(at + 1>= m_Capacity || !m_CanModify || !m_Data){
+            char* newData = new char[at + 1];
+            memcpy(newData, m_Data, m_Size);
+            Delete();
+            m_Data = newData;
+            m_CanFree = true;
+            m_CanModify = true;
+        }
+
+        0[m_Data + at] = c;
+    }
+
+    /// @brief Inserts c into the buffer at param at.
+    /// @param at the position to insert the char at. If we cant access the buffer or at >= m_Capacity we reallocate and the new buffers size is at + 1.
+    /// @param c the byte to insert at c
+    void InsertInt16At(size_t at, int16_t c)HBUFF_NOEXCEPT{
+        if(at + 2 >= m_Capacity || !m_CanModify || !m_Data){
+            char* newData = new char[at + 2];
+            memcpy(newData, m_Data, m_Size);
+            Delete();
+            m_Data = newData;
+            m_CanFree = true;
+            m_CanModify = true;
+        }
+
+        char* insertAt = m_Data + at;
+        #if HBUFF_ENDIAN_MODE == 0
+        insertAt[0] = c & 0xFF;
+        insertAt[1] = (c >> 8) & 0xFF;
+        #else
+        insertAt[0] = (c >> 8) & 0xFF;
+        insertAt[1] = c & 0xFF;
+        #endif
+    }
+
+    /// @brief Inserts c into the buffer at param at.
+    /// @param at the position to insert the char at. If we cant access the buffer or at >= m_Capacity we reallocate and the new buffers size is at + 1.
+    /// @param c the byte to insert at c
+    void InsertInt32At(size_t at, int32_t c)HBUFF_NOEXCEPT{
+        if(at + 4 >= m_Capacity || !m_CanModify || !m_Data){
+            char* newData = new char[at + 4];
+            memcpy(newData, m_Data, m_Size);
+            Delete();
+            m_Data = newData;
+            m_CanFree = true;
+            m_CanModify = true;
+        }
+
+        char* insertAt = m_Data + at;
+        #if HBUFF_ENDIAN_MODE == 0
+        insertAt[0] = c & 0xFF;
+        insertAt[1] = (c >> 8) & 0xFF;
+        insertAt[2] = (c >> 16) & 0xFF;
+        insertAt[2] = (c >> 24) & 0xFF;
+        #else
+        insertAt[0] = (c >> 24) & 0xFF;
+        insertAt[1] = (c >> 16) & 0xFF;
+        insertAt[2] = (c >> 8) & 0xFF;
+        insertAt[3] = c & 0xFF;
+        #endif
     }
 
     void Append(const HBuffer& buffer) HBUFF_NOEXCEPT{
