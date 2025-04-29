@@ -376,16 +376,32 @@ public:
         memcpy(m_Data + newPart1Size, food.m_Data + part2Change, newPart2Size);
         m_Size = newBuffSize;
     }
-    
 
+    void InsertAt(size_t at, const HBuffer& buffer) noexcept{
+        size_t otherSize = buffer.GetSize();
+        size_t minimumSize = at + otherSize;
+        if(minimumSize > m_Capacity || !m_CanModify || !m_Data){
+            char* newData = new char[minimumSize];
+            memcpy(newData, m_Data, m_Size);
+            Delete();
+            m_Data = newData;
+            m_CanFree = true;
+            m_CanModify = true;
+            m_Capacity = minimumSize;
+        }
+
+        memcpy(m_Data + at, buffer.GetData(), otherSize);
+    }
     /// @brief Inserts c into the buffer at param at.
     /// @param at the position to insert the char at. If we cant access the buffer or at >= m_Capacity we reallocate and the new buffers size is at + 1.
     /// @param c the byte to insert at c
     void InsertInt8At(size_t at, int8_t c)HBUFF_NOEXCEPT{
-        if(at + 1>= m_Capacity || !m_CanModify || !m_Data){
-            char* newData = new char[at + 1];
+        size_t minimumSize = at + 1;
+        if(minimumSize >= m_Capacity || !m_CanModify || !m_Data){
+            char* newData = new char[minimumSize];
             memcpy(newData, m_Data, m_Size);
             Delete();
+            m_Capacity = minimumSize;
             m_Data = newData;
             m_CanFree = true;
             m_CanModify = true;
