@@ -409,7 +409,7 @@ public:
         }
 
         memcpy(m_Data + at, str, characters);
-        memset(m_Data + at + characters, 0, 1
+        memset(m_Data + at + characters, 0, 1);
     }
     /// @brief Inserts c into the buffer at param at.
     /// @param at the position to insert the char at. If we cant access the buffer or at >= m_Capacity we reallocate and the new buffers size is at + 1.
