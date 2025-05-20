@@ -392,6 +392,25 @@ public:
 
         memcpy(m_Data + at, buffer.GetData(), otherSize);
     }
+    /// @brief Inserts a null terminated string
+    /// @param at the place inside the buffer to insert the string into
+    /// @param str the string to copy characters from
+    /// @param characters the amount of actual characters excluding the null terminator
+    void InsertAt(size_t at, const char* str, size_t characters) noexcept{
+        size_t minimumSize = at + characters + 1;
+        if(minimumSize > m_Capacity || !m_CanModify || !m_Data){
+            char* newData = new char[minimumSize];
+            memcpy(newData, m_Data, m_Size);
+            Delete();
+            m_Data = newData;
+            m_CanFree = true;
+            m_CanModify = true;
+            m_Capacity = minimumSize;
+        }
+
+        memcpy(m_Data + at, str, characters);
+        memset(m_Data + at + characters, 0, 1
+    }
     /// @brief Inserts c into the buffer at param at.
     /// @param at the position to insert the char at. If we cant access the buffer or at >= m_Capacity we reallocate and the new buffers size is at + 1.
     /// @param c the byte to insert at c
