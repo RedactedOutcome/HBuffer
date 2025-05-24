@@ -201,6 +201,12 @@ public:
         return m_Data[at];
     }
 
+    /// @brief Creates a copy of the current buffer
+    HBuffer CreateCopy()HBUFF_NOEXCEPT{
+        char* data = new char[m_Size];
+        memcpy(data, m_Data, m_Size);
+        return HBuffer(data, m_Size, m_Size, true, true);
+    }
     /// @brief Allocate a copy of data
     static HBuffer CreateCopy(const std::string& string) HBUFF_NOEXCEPT{
         size_t size = string.size();
