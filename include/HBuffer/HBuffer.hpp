@@ -7,7 +7,7 @@
 
 #ifndef HBUFF_ENDIAN_MODE
 /// Defaulting to Little Endian
-#define HBUFF_ENDIAN_MODE = 0
+#define HBUFF_ENDIAN_MODE 0
 #endif
 
 /// TODO: For reallocation chekds just check if we cn modify 
