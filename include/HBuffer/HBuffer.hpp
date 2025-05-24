@@ -202,7 +202,7 @@ public:
     }
 
     /// @brief Creates a copy of the current buffer
-    HBuffer CreateCopy()HBUFF_NOEXCEPT{
+    HBuffer CreateCopy() const HBUFF_NOEXCEPT{
         char* data = new char[m_Size];
         memcpy(data, m_Data, m_Size);
         return HBuffer(data, m_Size, m_Size, true, true);
