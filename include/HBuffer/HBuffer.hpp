@@ -2,6 +2,14 @@
 
 #include "Core.h"
 
+/// HBUFF_ENDIAN_MODE == 0. Little Endian
+/// HBUFF_ENDIAN_MODE == 1. Big Endian
+
+#ifndef HBUFF_ENDIAN_MODE
+/// Defaulting to Little Endian
+#define HBUFF_ENDIAN_MODE = 0
+#endif
+
 /// TODO: For reallocation chekds just check if we cn modify 
 class HBuffer{
 public:
@@ -485,7 +493,7 @@ public:
         #endif
     }
 
-    void Append(uint16_t value) HBUFF_NOEXCEPT{
+    void AppendUInt16_t(uint16_t value) HBUFF_NOEXCEPT{
         size_t newSize = m_Size + 2;
         if(!m_CanModify || newSize > m_Capacity || !m_Data){
             char* data = new char[newSize];
@@ -497,11 +505,16 @@ public:
             m_CanModify = true;
         }
 
+    #if HBUFF_ENDIAN_MODE == 0
+        m_Data[m_Size] = value & 0xFF;
+        m_Data[m_Size + 1] = (value >> 8) & 0xFF;
+    #else
         m_Data[m_Size] = (value >> 8) & 0xFF;
         m_Data[m_Size + 1] = value & 0xFF;
+    #endif
         m_Size = newSize;
     }
-    void Append(uint32_t value) HBUFF_NOEXCEPT{
+    void AppendUInt32_t(uint32_t value) HBUFF_NOEXCEPT{
         size_t newSize = m_Size + 4;
         if(!m_CanModify || newSize > m_Capacity || !m_Data){
             char* data = new char[newSize];
