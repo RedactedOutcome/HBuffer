@@ -485,6 +485,40 @@ public:
         #endif
     }
 
+    void Append(uint16_t value) HBUFF_NOEXCEPT{
+        size_t newSize = m_Size + 2;
+        if(!m_CanModify || newSize > m_Capacity || !m_Data){
+            char* data = new char[newSize];
+            memcpy(data, m_Data, m_Size);
+            Delete();
+            m_Data = data;
+            m_Capacity = newSize;
+            m_CanFree = true;
+            m_CanModify = true;
+        }
+
+        m_Data[m_Size] = (value >> 8) & 0xFF;
+        m_Data[m_Size + 1] = value & 0xFF;
+        m_Size = newSize;
+    }
+    void Append(uint32_t value) HBUFF_NOEXCEPT{
+        size_t newSize = m_Size + 4;
+        if(!m_CanModify || newSize > m_Capacity || !m_Data){
+            char* data = new char[newSize];
+            memcpy(data, m_Data, m_Size);
+            Delete();
+            m_Data = data;
+            m_Capacity = newSize;
+            m_CanFree = true;
+            m_CanModify = true;
+        }
+
+        m_Data[m_Size] = (value >> 24) & 0xFF;
+        m_Data[m_Size + 1] = (value >> 16) & 0xFF;
+        m_Data[m_Size + 2] = (value >> 8) & 0xFF;
+        m_Data[m_Size + 3] = value & 0xFF;
+        m_Size = newSize;
+    }
     void Append(const HBuffer& buffer) HBUFF_NOEXCEPT{
         size_t otherSize = buffer.m_Size;
         size_t newSize = m_Size + otherSize;
