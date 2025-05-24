@@ -171,6 +171,20 @@ public:
         m_CanModify = true;
     }
 
+    /// @brief Reserves the buffer to be atleast param newSize bytes ontop of m_Size. If newSize <= capacity then no reallocation is done. Else we free/release data and reallocate
+    /// @param newCapacity the new capacity of the buffer. Only reallocates if newCapacity +m_Size > m_Capacity 
+    void ReserveExtra(size_t newCapacity) HBUFF_NOEXCEPT{
+        newCapacity+= m_Size;
+        if(newCapacity <= m_Capacity)return;
+
+        char* data = new char[newCapacity];
+        memcpy(data, m_Data, m_Size);
+        if(m_CanFree)delete m_Data;
+        m_Data = data;
+        m_Capacity = newCapacity;
+        m_CanFree = true;
+        m_CanModify = true;
+    }
 
     /// @brief Reserves param newCapacity + 1 bytes in memory. With the additional byte being the null terminator.
     void ReserveString(size_t newCapacity) HBUFF_NOEXCEPT{
