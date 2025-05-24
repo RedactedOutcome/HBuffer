@@ -493,7 +493,7 @@ public:
         #endif
     }
 
-    void AppendUInt16_t(uint16_t value) HBUFF_NOEXCEPT{
+    void AppendUInt16(uint16_t value) HBUFF_NOEXCEPT{
         size_t newSize = m_Size + 2;
         if(!m_CanModify || newSize > m_Capacity || !m_Data){
             char* data = new char[newSize];
@@ -514,7 +514,7 @@ public:
     #endif
         m_Size = newSize;
     }
-    void AppendUInt32_t(uint32_t value) HBUFF_NOEXCEPT{
+    void AppendUInt32(uint32_t value) HBUFF_NOEXCEPT{
         size_t newSize = m_Size + 4;
         if(!m_CanModify || newSize > m_Capacity || !m_Data){
             char* data = new char[newSize];
