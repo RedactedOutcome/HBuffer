@@ -546,6 +546,69 @@ public:
         m_Data[m_Size + 3] = value & 0xFF;
         m_Size = newSize;
     }
+
+    /// TODO: create a function that can also just extract by treating at as a pointer into the array and assign *dst = *reinterpret_cast<uintn_t*>(m_Data[at])
+    bool ExtractInt8(size_t at, int8_t* dst)const HBUFF_NOEXCEPT{
+        if(at < m_Size){
+            *dst = static_cast<int8_t>(m_Data[at]);
+            return true;
+        }
+        return false;
+    }
+    
+    bool ExtractUInt8(size_t at, uint8_t* dst)const HBUFF_NOEXCEPT{
+        if(at < m_Size){
+            *dst = static_cast<uint8_t>(m_Data[at]);
+            return true;
+        }
+        return false;
+    }
+    bool ExtractInt16(size_t at, int16_t* dst)const HBUFF_NOEXCEPT{
+        if(at + 1 < m_Size){
+        #if HBUFF_ENDIAN_MODE == 0
+            *dst = static_cast<int16_t>(m_Data[at + 1] >> 8 | m_Data[at]);
+        #else
+            *dst = static_cast<int16_t>(m_Data[at] >> 8 | m_Data[at + 1]);
+        #endif
+            return true;
+        }
+        return false;
+    }
+    
+    bool ExtractUInt16(size_t at, uint16_t* dst)const HBUFF_NOEXCEPT{
+        if(at + 1 < m_Size){
+        #if HBUFF_ENDIAN_MODE == 0
+            *dst = static_cast<uint16_t>(m_Data[at + 1] >> 8 | m_Data[at]);
+        #else
+            *dst = static_cast<uint16_t>(m_Data[at] >> 8 | m_Data[at + 1]);
+        #endif
+            return true;
+        }
+        return false;
+    }
+    bool ExtractInt32(size_t at, int32_t* dst)const HBUFF_NOEXCEPT{
+        if(at + 3 < m_Size){
+        #if HBUFF_ENDIAN_MODE == 0
+            *dst = static_cast<int32_t>(m_Data[at + 3] >> 24 | m_Data[at + 2] >> 16 | m_Data[at + 1] >> 8 | m_Data[at]);
+        #else
+            *dst = static_cast<int32_t>(m_Data[at] >> 24 | m_Data[at + 1] >> 16 | m_Data[at + 2] >> 8 | m_Data[at + 3]);
+        #endif
+            return true;
+        }
+        return false;
+    }
+    
+    bool ExtractUInt32(size_t at, uint32_t* dst)const HBUFF_NOEXCEPT{
+        if(at + 3 < m_Size){
+        #if HBUFF_ENDIAN_MODE == 0
+            *dst = static_cast<uint32_t>(m_Data[at + 3] >> 24 | m_Data[at + 2] >> 16 | m_Data[at + 1] >> 8 | m_Data[at]);
+        #else
+            *dst = static_cast<uint32_t>(m_Data[at] >> 24 | m_Data[at + 1] >> 16 | m_Data[at + 2] >> 8 | m_Data[at + 3]);
+        #endif
+            return true;
+        }
+        return false;
+    }
     void Append(const HBuffer& buffer) HBUFF_NOEXCEPT{
         size_t otherSize = buffer.m_Size;
         size_t newSize = m_Size + otherSize;
