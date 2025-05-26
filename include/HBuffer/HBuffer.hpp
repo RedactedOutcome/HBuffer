@@ -1187,12 +1187,24 @@ public:
         }
     }
 
+    /// @brief makes sure the string ends with a null terminator. Reallocates if buffer isnt long enough
+    void MakeSafeString() HBUFF_NOEXCEPT{
+        if(m_Size >= m_Capacity){
+            m_Capacity = m_Size + 1;
+            char* data = new char[m_Capacity];
+            memcpy(data, m_Data, m_Size);
+            Free();
+            m_Data = data;
+            m_CanFree = true;
+            m_CanModify = true;
+        }
+        m_Data[m_Size] = '\0';
+    }
     HBuffer GetSafeString() const HBUFF_NOEXCEPT{
         HBuffer buff;
         buff.AppendString(*this);
         return buff;
     }
-
 
     /// @brief Allocates a new c string on the heap with the data of the buffer followed by null terminator without modifying the current buffer.
     /// @return if current buffer is not a c string or is too small to be one we allocate new data and return a new buffer. Else we return a view of the current one.
