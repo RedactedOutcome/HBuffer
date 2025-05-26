@@ -1187,11 +1187,10 @@ public:
         }
     }
 
-    /// @brief makes sure the string ends with a null terminator. Reallocates if buffer isnt long enough
+    /// @brief makes sure the string ends with a null terminator. Reallocates buffer if necessary
     void MakeSafeString() HBUFF_NOEXCEPT{
-        if(m_Capacity > 0 && m_Data[m_Size] == '\0'){
+        if(m_Capacity > 0 && m_Data[m_Size] == '\0')
             return;
-        }
         if(!m_Data || !m_CanModify || m_Size >= m_Capacity){
             m_Capacity = m_Size + 1;
             char* data = new char[m_Capacity];
