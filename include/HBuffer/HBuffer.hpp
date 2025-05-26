@@ -1189,7 +1189,7 @@ public:
 
     /// @brief makes sure the string ends with a null terminator. Reallocates if buffer isnt long enough
     void MakeSafeString() HBUFF_NOEXCEPT{
-        if(m_Size >= m_Capacity){
+        if(!m_Data || !m_CanModify || m_Size >= m_Capacity){
             m_Capacity = m_Size + 1;
             char* data = new char[m_Capacity];
             memcpy(data, m_Data, m_Size);
