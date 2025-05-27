@@ -1195,7 +1195,7 @@ public:
             m_Capacity = m_Size + 1;
             char* data = new char[m_Capacity];
             memcpy(data, m_Data, m_Size);
-            Free();
+            Delete();
             m_Data = data;
             m_CanFree = true;
             m_CanModify = true;
