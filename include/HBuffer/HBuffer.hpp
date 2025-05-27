@@ -1405,6 +1405,10 @@ public:
         if(m_Size != 1)return true;
         return m_Data[0] != c;
     }
+    std::ostream& operator<<(std::ostream& os) {
+        for(size_t i = 0; i < m_Size; i++)os << m_Data[i];
+        return os;
+    }
 private:
     char* m_Data = nullptr;
     size_t m_Size = 0;
