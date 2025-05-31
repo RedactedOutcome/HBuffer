@@ -539,11 +539,17 @@ public:
             m_CanFree = true;
             m_CanModify = true;
         }
-
+    #if HBUFF_ENDIAN_MODE == 0
+        m_Data[m_Size] = value & 0xFF;
+        m_Data[m_Size + 1] = (value >> 8) & 0xFF;
+        m_Data[m_Size + 2] = (value >> 16) & 0xFF;
+        m_Data[m_Size + 3] = (value >> 24) & 0xFF;
+    #else
         m_Data[m_Size] = (value >> 24) & 0xFF;
         m_Data[m_Size + 1] = (value >> 16) & 0xFF;
         m_Data[m_Size + 2] = (value >> 8) & 0xFF;
         m_Data[m_Size + 3] = value & 0xFF;
+    #endif
         m_Size = newSize;
     }
 
@@ -601,7 +607,7 @@ public:
     bool ExtractUInt32(size_t at, uint32_t* dst)const HBUFF_NOEXCEPT{
         if(at + 3 < m_Size){
         #if HBUFF_ENDIAN_MODE == 0
-            *dst = static_cast<uint32_t>(m_Data[at + 3] >> 24 | m_Data[at + 2] >> 16 | m_Data[at + 1] >> 8 | m_Data[at]);
+            *dst = static_cast<uint32_t>(m_Data[at + 3] >> 24| m_Data[at + 2] >> 16 | m_Data[at + 1] >> 8 | m_Data[at]);
         #else
             *dst = static_cast<uint32_t>(m_Data[at] >> 24 | m_Data[at + 1] >> 16 | m_Data[at + 2] >> 8 | m_Data[at + 3]);
         #endif
