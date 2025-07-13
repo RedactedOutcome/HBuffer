@@ -1223,13 +1223,14 @@ public:
             memcpy(data, m_Data, m_Size);
             return HBuffer(data, m_Size, newCapacity, true, true);
         }
-
+        if(m_Data[m_Size] != '\00'){
+            size_t capacity = m_Size + 1;
+            char* data = new char[capacity];
+            memcpy(data, m_Data, m_Size);
+            data[m_Size] = '\00';
+            return HBuffer(data, m_Size, capacity, true, true);
+        }
         return *this;
-        /*
-        char* data = new char[m_Size + 1];
-        memcpy(data, m_Data, m_Size);
-        memset(data + m_Size, '\0', 1);
-        return data;*/
     }
 
     /// @brief Makes sure there is a null terminator at the end of the buffer and returns the buffers data. Might of just made this for nothing
@@ -1248,27 +1249,19 @@ public:
         return m_Data;
     }
 public:
-    /// @brief if data is not null returns that data if it is null we return a non allocated "" literal
+    /// @brief if the data is not a null pointer then trust it else we return a basic static memory pointer to a null terminator
     const char* GetCStr() const HBUFF_NOEXCEPT{return m_Data ? m_Data : "";}
-    /// @brief returns data ptr
+    /// @brief returns if the buffer owns the data
     HBUFF_CONSTEXPR bool CanFree() const HBUFF_NOEXCEPT{return m_CanFree;}
+    /// @brief returns if the buffer may modify the data
     HBUFF_CONSTEXPR bool CanModify() const HBUFF_NOEXCEPT{return m_CanModify;}
+    /// @brief returns the pointer to the data the buffer is using
     HBUFF_CONSTEXPR char* GetData() const HBUFF_NOEXCEPT{return m_Data;}
+    /// @brief returns the size of the buffer
     HBUFF_CONSTEXPR size_t GetSize() const HBUFF_NOEXCEPT{return m_Size;}
+    /// @brief returns the capacity of the buffer
     HBUFF_CONSTEXPR size_t GetCapacity() const HBUFF_NOEXCEPT{return m_Capacity;}
 public:
-    /*
-    /// @brief Frees data and sets data to a non owning view of param right's data
-    HBuffer& operator=(HBuffer& right) HBUFF_NOEXCEPT{
-        Free();
-        m_Data = right.m_Data;
-        m_Size = right.m_Size;
-        m_Capacity = right.m_Capacity;
-        m_CanModify = right.m_CanModify;
-        m_CanFree = false;
-        return *this;
-    }*/
-
     char& operator[](size_t at) HBUFF_NOEXCEPT{
         return m_Data[at];
     }
@@ -1353,10 +1346,7 @@ public:
         m_Size = newSize;
         return *this;
     }
-    /// @brief adds an offset to the vector. If owns data it frees and reallocates. If not then we just increment pointer and change size
-    ///HBuffer& operator+=(size_t offset) HBUFF_NOEXCEPT;
-    //TODO:maybe possible -= operator if needed
-
+    
     /// @brief compares if the data inside the buffer matches and not the places in memory.
     HBUFF_CONSTEXPR bool operator==(const HBuffer& right)const HBUFF_NOEXCEPT{
         if(m_Size != right.m_Size)return false;
