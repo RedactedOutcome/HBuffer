@@ -1405,6 +1405,9 @@ public:
         for(size_t i = 0; i < m_Size; i++)os << m_Data[i];
         return os;
     }
+    operator bool() const HBUFF_NOEXCEPT{
+        return m_Data != nullptr;
+    }
 private:
     char* m_Data = nullptr;
     size_t m_Size = 0;
