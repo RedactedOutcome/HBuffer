@@ -137,10 +137,11 @@ public:
         if(size > m_Capacity){
             char* newData = new char[size];
             memcpy(newData, m_Data, m_Capacity);
-            if(m_CanFree)m_Data = newData;
+            if(m_CanFree)delete m_Data;
             m_CanFree = true;
             m_CanModify = true;
             m_Capacity = size;
+            m_Data = newData;
         }
         m_Size = size;
     }
