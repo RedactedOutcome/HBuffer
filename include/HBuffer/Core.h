@@ -2,13 +2,12 @@
 
 //Handles defines and importing standard library
 #ifdef HBUFFER_USE_PCH
-#pragma warning USING PCH
 #ifndef HBUFFER_PCH_DIR
     #error HBUFFER no pch location specified
 #endif
 
 #include HBUFFER_PCH_DIR
-else
+#else
 
 #include <iostream>
 #include <string>
