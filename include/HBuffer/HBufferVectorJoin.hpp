@@ -69,6 +69,7 @@ public:
                 totalBefore = total;
                 size_t maxLength = m_Indices[indicesSize - 1] + m_Vectors[indicesSize - 1].GetSize();
                 totalLen = std::min(maxLength - at, len);
+                std::cout << "TotalLen:" << totalLen<<std::endl;
                 string.ReserveString(totalLen);
                 break;
             }
