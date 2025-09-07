@@ -69,7 +69,6 @@ public:
                 totalBefore = total;
                 size_t maxLength = m_Indices[indicesSize - 1] + m_Vectors[indicesSize - 1].GetSize();
                 totalLen = std::min(maxLength - at, len);
-                std::cout << "TotalLen:" << totalLen<<std::endl;
                 string.ReserveString(totalLen);
                 break;
             }
@@ -82,13 +81,9 @@ public:
 
         size_t accumulatedLength = 0;
         for(size_t index = startIndex; index < indicesSize; index++){
-            std::cout << "Start index " << index<<std::endl;
-            std::cout << "At " << at << "Before : " << totalBefore<<std::endl;
             HBuffer& referenceBuffer = m_Vectors[index];
             size_t bufferAt = index == startIndex ? at - totalBefore : 0;
             size_t bufferLen = std::min(referenceBuffer.GetSize() - bufferAt, totalLen - accumulatedLength);
-            std::cout << "Buffer at : " << bufferAt<<std::endl;
-            std::cout << "buffer len " << bufferLen<<std::endl;
             HBuffer data = referenceBuffer.SubBuffer(bufferAt, bufferLen);
             string.Append(data);
             accumulatedLength += bufferLen;
