@@ -85,6 +85,7 @@ public:
             HBuffer& referenceBuffer = m_Vectors[index];
             size_t bufferAt = index == startIndex ? at - totalBefore : 0;
             size_t bufferLen = std::min(referenceBuffer.GetSize(), totalLen - accumulatedLength);
+            std::cout << "buffer len " << bufferLen<<std::endl;
             HBuffer data = referenceBuffer.SubBuffer(bufferAt, bufferLen);
             string.Append(data);
             accumulatedLength += bufferLen;
