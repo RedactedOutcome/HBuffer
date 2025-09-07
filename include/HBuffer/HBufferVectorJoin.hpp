@@ -67,7 +67,7 @@ public:
             if(at >= total){
                 /// Getting max possible string length
                 totalBefore = total;
-                size_t maxLength = m_Indices[indicesSize - 1] + m_Vectors[indicesSize - 1];
+                size_t maxLength = m_Indices[indicesSize - 1] + m_Vectors[indicesSize - 1].GetSize();
                 totalLen = std::min(maxLength - at, len);
                 string.ReserveString(totalLen);
                 break;
