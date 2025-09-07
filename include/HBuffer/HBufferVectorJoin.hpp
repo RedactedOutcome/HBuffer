@@ -132,8 +132,8 @@ public:
         m_Indices.emplace_back(lastIndice + vecSize);
     }
 public:
-    std::vector<HBuffer, Allocator>& GetVectors()const noexcept{return m_Vectors;}
-    std::vector<size_t>& GetIndices()const noexcept{return m_Indices;}
+    std::vector<HBuffer, Allocator>& GetVectors()const noexcept{return (std::vector<HBuffer, Allocator>&)m_Vectors;}
+    std::vector<size_t>& GetIndices()const noexcept{return (std::vector<size_t>&)m_Indices;}
 private:
     std::vector<HBuffer, Allocator> m_Vectors;
     /// @brief a vector where each node contains the sizes of all vectors before it
