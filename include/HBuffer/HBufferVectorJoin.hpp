@@ -92,6 +92,13 @@ public:
         return string;
     }
 
+    /// TODO: Sub join. Kinda like subpointer on Hbuffer except we dont want to allocate any data except for the m_Vectors and m_Indices
+    HBufferVectorJoin SubJoin()const noexcept{
+        HBufferVectorJoin join;
+
+        return join;
+    }
+
     template <typename... Args>
     void EmplaceBack(Args&&... args){
         size_t lastIndice = 0;
