@@ -53,16 +53,10 @@ public:
         return vec.At(relativeAt);
     }
 
-
-    /// @brief creates a non null terminated copy of the buffer starting from param at with a size of param len
-    /// @param at the byte offset of the join to start copying from
-    /// @param len the amount of bytes the new sub buffer will be
-    HBuffer SubBuffer(size_t at, size_t len) HBUFF_NOEXCEPT{}
-
     /// @brief creates a single null terminated ascii string starting at at and is size len
     /// @brief at the position to start copying from
     /// @param len the length of the ascii bytes in the new string. will be maxed out at the buffers
-    HBuffer SubString(size_t at, size_t len)HBUFF_NOEXCEPT{
+    HBuffer SubString(size_t at, size_t len=-1)HBUFF_NOEXCEPT{
         HBuffer string;
         size_t totalLen = 0;
         size_t startIndex;
@@ -74,7 +68,7 @@ public:
                 /// Getting max possible string length
                 totalBefore = total;
                 size_t maxLength = m_Indices[indicesSize - 1] + m_Vectors[indicesSize - 1];
-                totalLen = maxLength - at;
+                totalLen = std::min(maxLength - at, len);
                 string.ReserveString(totalLen);
                 break;
             }
@@ -88,10 +82,11 @@ public:
         size_t accumulatedLength = 0;
         for(size_t index = startIndex; index < indicesSize; index){
             HBuffer& referenceBuffer = m_Vectors[i];
-            size_t bufferAt = index == startIndex ? (at - totalBefore) ? 0;
+            size_t bufferAt = index == startIndex ? at - totalBefore : 0;
+            size_t bufferLen = std::min(referenceBuffer.GetSize(), totalLen - accumulatedLength);
             HBuffer data = referenceBuffer.SubBuffer(bufferAt, bufferLen);
             string.Append(data);
-            accumulatedLength += data.GetSize();
+            accumulatedLength += bufferLen;
             if(accumulatedLength >= totalLen)break;
         }
         return string;
