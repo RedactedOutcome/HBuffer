@@ -105,6 +105,32 @@ public:
         m_Vectors.emplace_back(std::forward<Args>(args)...);
         m_Indices.emplace_back(lastIndice + vecSize);
     }
+
+    void EmplaceBack(const HBuffer& buffer){
+        size_t lastIndice = 0;
+        size_t vecSize = 0;
+        size_t indicesSize = m_Indices.size();
+        if(indicesSize > 0){
+            size_t indice = indicesSize - 1;
+            lastIndice = m_Indices[indice];
+            vecSize = m_Vectors[indice].GetSize();
+        }
+        m_Vectors.emplace_back(buffer);
+        m_Indices.emplace_back(lastIndice + vecSize);
+    }
+    
+    void EmplaceBack(HBuffer&& buffer){
+        size_t lastIndice = 0;
+        size_t vecSize = 0;
+        size_t indicesSize = m_Indices.size();
+        if(indicesSize > 0){
+            size_t indice = indicesSize - 1;
+            lastIndice = m_Indices[indice];
+            vecSize = m_Vectors[indice].GetSize();
+        }
+        m_Vectors.emplace_back(std::move(buffer));
+        m_Indices.emplace_back(lastIndice + vecSize);
+    }
 public:
     std::vector<HBuffer, Allocator>& GetVectors()const noexcept{return m_Vectors;}
     std::vector<size_t>& GetIndices()const noexcept{return m_Indices;}
