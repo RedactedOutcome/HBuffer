@@ -93,7 +93,7 @@ public:
     }
 
     template <typename... Args>
-    void EmplaceBack(Args&& args){
+    void EmplaceBack(Args&&... args){
         size_t lastIndice = 0;
         size_t vecSize = 0;
         size_t indicesSize = m_Indices.size();
