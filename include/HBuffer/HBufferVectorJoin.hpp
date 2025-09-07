@@ -82,6 +82,7 @@ public:
 
         size_t accumulatedLength = 0;
         for(size_t index = startIndex; index < indicesSize; index++){
+            std::cout << "Start index " << index<<std::endl;
             HBuffer& referenceBuffer = m_Vectors[index];
             size_t bufferAt = index == startIndex ? at - totalBefore : 0;
             size_t bufferLen = std::min(referenceBuffer.GetSize() - bufferAt, totalLen - accumulatedLength);
