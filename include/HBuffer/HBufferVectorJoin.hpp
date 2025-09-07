@@ -64,7 +64,7 @@ public:
         size_t indicesSize = m_Indices.size();
         for(startIndex = 0; startIndex < indicesSize; startIndex++){
             size_t total = m_Indices[startIndex];
-            if(at >= total){
+            if(at < total + m_Vectors[startIndex].GetSize()){
                 /// Getting max possible string length
                 totalBefore = total;
                 size_t maxLength = m_Indices[indicesSize - 1] + m_Vectors[indicesSize - 1].GetSize();
