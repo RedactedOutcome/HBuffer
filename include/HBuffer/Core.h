@@ -8,7 +8,6 @@
 
 #include HBUFFER_PCH_DIR
 #else
-
 #include <iostream>
 #include <string>
 #include <string.h>

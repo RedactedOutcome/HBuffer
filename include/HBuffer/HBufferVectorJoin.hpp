@@ -7,10 +7,10 @@
 
 /// @brief A vector of type std::vector<HBuffer>
 template <typename Allocator=std::allocator<HBuffer>>
-class HBufferVector{
+class HBufferVectorJoin{
 public:
-    HBufferVector() HBUFF_NOEXCEPT{}
-    ~HBufferVector() HBUFF_NOEXCEPT{}
+    HBufferVectorJoin() HBUFF_NOEXCEPT{}
+    ~HBufferVectorJoin() HBUFF_NOEXCEPT{}
 
     bool StartsWith(const char* str, size_t len) const HBUFF_NOEXCEPT{}
     bool StartsWith(size_t at, const char* str) const HBUFF_NOEXCEPT{}
@@ -92,7 +92,7 @@ public:
         return string;
     }
 
-    template <typename Args...>
+    template <typename... Args>
     void EmplaceBack(Args&& args){
         size_t lastIndice = 0;
         size_t vecSize = 0;
