@@ -12,9 +12,35 @@ public:
     HBufferVectorJoin() HBUFF_NOEXCEPT{}
     ~HBufferVectorJoin() HBUFF_NOEXCEPT{}
 
-    bool StartsWith(const char* str, size_t len) const HBUFF_NOEXCEPT{}
-    bool StartsWith(size_t at, const char* str) const HBUFF_NOEXCEPT{}
-    bool StartsWith(size_t at, const char* str, size_t len) const HBUFF_NOEXCEPT{}
+    bool StartsWith(const char* str, size_t len) const HBUFF_NOEXCEPT{
+        size_t at = 0;
+        for(size_t i = 0; i < m_Vectors.size();i++){
+            HBuffer& reference = m_Vectors[i];
+            for(size_t j = 0; j < reference.GetSize(); i++){
+                if(reference.At(j) != str[at])return false;
+                if(at >= len)return true;
+                at++;
+            }
+        }
+
+        return at >= len;
+    }
+    bool StartsWith(size_t at, const char* str) const HBUFF_NOEXCEPT{return false;}
+    bool StartsWith(size_t at, const char* str, size_t len) const HBUFF_NOEXCEPT{return false;}
+
+    void Reserve(size_t size)noexcept{
+        m_Vectors.reserve(size);
+        m_Indices.reserve(size);
+    }
+
+    void Resize(size_t size)noexcept{
+        m_Vectors.resize(size);
+        m_Indices.resize(size);
+    }
+    void Clear()noexcept{
+        m_Vectors.clear();
+        m_Indices.clear();
+    }
 
     /// @brief returns the character at param at if inside the buffer else \0
     char Get(size_t at)const HBUFF_NOEXCEPT{
@@ -56,7 +82,7 @@ public:
     /// @brief creates a single null terminated ascii string starting at at and is size len
     /// @brief at the position to start copying from
     /// @param len the length of the ascii bytes in the new string. will be maxed out at the buffers
-    HBuffer SubString(size_t at, size_t len=-1)HBUFF_NOEXCEPT{
+    HBuffer SubString(size_t at, size_t len=-1)const HBUFF_NOEXCEPT{
         HBuffer string;
         size_t totalLen = 0;
         size_t startIndex;
