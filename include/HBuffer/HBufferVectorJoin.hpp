@@ -138,6 +138,17 @@ public:
         m_Vectors.emplace_back(std::move(buffer));
         m_Indices.emplace_back(lastIndice + vecSize);
     }
+
+    void Erase(size_t at)noexcept{
+        size_t vectorSize = m_Vectors.size();
+        if(vectorSize < 0)return;
+        if(at >= vectorSize)return;
+        for(size_t i = at + 1; i < m_Vectors.size();i++){
+            m_Indices[i] = m_Indices[i - 1];
+        }
+        m_Vectors.erase(m_Vectors.begin() + at);
+        m_Indices.erase(m_Indices.begin() + at);
+    }
 public:
     std::vector<HBuffer, Allocator>& GetVectors()const noexcept{return (std::vector<HBuffer, Allocator>&)m_Vectors;}
     std::vector<size_t>& GetIndices()const noexcept{return (std::vector<size_t>&)m_Indices;}
