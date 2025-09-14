@@ -138,7 +138,7 @@ public:
     
     size_t GetSize()const noexcept{
         if(m_Indices.size() < 1)return 0;
-        return *m_Indices.back() + m_Vectors.back()->GetSize();
+        return m_Indices.back() + m_Vectors.back().GetSize();
     }
 
     HBufferVectorJoinIndexInfo GetInfo(size_t at)const HBUFF_NOEXCEPT{
