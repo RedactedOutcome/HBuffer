@@ -5,6 +5,17 @@
 
 /// TODO: finish because this is not ready to publish
 
+struct HBufferVectorJoinIndexInfo{
+    /// @brief the entire buffer of data at the indice.
+    HBuffer m_Vector;
+    /// @brief the indice into the vectors buffer
+    size_t m_Indice = 0;
+    /// @brief the amounf of data before that buffer
+    size_t m_TotalBefore=0;
+    /// @brief the byte offset inside the buffer where that data resides
+    size_t m_ByteOffset = 0;
+    bool m_Valid = false;
+};
 /// @brief A vector of type std::vector<HBuffer>
 template <typename Allocator=std::allocator<HBuffer>>
 class HBufferVectorJoin{
@@ -28,16 +39,16 @@ public:
     bool StartsWith(size_t at, const char* str) const HBUFF_NOEXCEPT{return false;}
     bool StartsWith(size_t at, const char* str, size_t len) const HBUFF_NOEXCEPT{return false;}
 
-    void Reserve(size_t size)noexcept{
+    void Reserve(size_t size)HBUFF_NOEXCEPT{
         m_Vectors.reserve(size);
         m_Indices.reserve(size);
     }
 
-    void Resize(size_t size)noexcept{
+    void Resize(size_t size)HBUFF_NOEXCEPT{
         m_Vectors.resize(size);
         m_Indices.resize(size);
     }
-    void Clear()noexcept{
+    void Clear()HBUFF_NOEXCEPT{
         m_Vectors.clear();
         m_Indices.clear();
     }
@@ -130,8 +141,23 @@ public:
         return *m_Indices.back() + m_Vectors.back()->GetSize();
     }
 
+    HBufferVectorJoinIndexInfo GetInfo(size_t at)const HBUFF_NOEXCEPT{
+        for(size_t i = 0; i < m_Indices.size(); i++){
+            size_t totalBefore = m_Indices[i];
+            HBuffer& vector = m_Vectors[i];
+            if(totalBefore + vector.GetSize() < at)continue;
+            HBufferVectorJoinIndexInfo info;
+            info.m_Vector = vector;
+            info.m_Indice = i;
+            info.m_Valid = true;
+            info.m_ByteOffset = at - totalBefore;
+            info.m_TotalBefore = totalBefore;
+            return info;
+        }
+        return HBufferVectorJoinIndexInfo{};
+    }
     template <typename... Args>
-    void EmplaceBack(Args&&... args){
+    void EmplaceBack(Args&&... args) HBUFF_NOEXCEPT{
         size_t lastIndice = 0;
         size_t vecSize = 0;
         size_t indicesSize = m_Indices.size();
@@ -144,7 +170,7 @@ public:
         m_Indices.emplace_back(lastIndice + vecSize);
     }
 
-    void EmplaceBack(const HBuffer& buffer){
+    void EmplaceBack(const HBuffer& buffer)HBUFF_NOEXCEPT{
         size_t lastIndice = 0;
         size_t vecSize = 0;
         size_t indicesSize = m_Indices.size();
@@ -157,7 +183,7 @@ public:
         m_Indices.emplace_back(lastIndice + vecSize);
     }
     
-    void EmplaceBack(HBuffer&& buffer){
+    void EmplaceBack(HBuffer&& buffer)HBUFF_NOEXCEPT{
         size_t lastIndice = 0;
         size_t vecSize = 0;
         size_t indicesSize = m_Indices.size();
@@ -170,7 +196,7 @@ public:
         m_Indices.emplace_back(lastIndice + vecSize);
     }
 
-    void Erase(size_t at)noexcept{
+    void Erase(size_t at)HBUFF_NOEXCEPT{
         size_t vectorSize = m_Vectors.size();
         if(vectorSize < 0)return;
         if(at >= vectorSize)return;
@@ -181,8 +207,8 @@ public:
         m_Indices.erase(m_Indices.begin() + at);
     }
 public:
-    std::vector<HBuffer, Allocator>& GetVectors()const noexcept{return (std::vector<HBuffer, Allocator>&)m_Vectors;}
-    std::vector<size_t>& GetIndices()const noexcept{return (std::vector<size_t>&)m_Indices;}
+    std::vector<HBuffer, Allocator>& GetVectors()const HBUFF_NOEXCEPT{return (std::vector<HBuffer, Allocator>&)m_Vectors;}
+    std::vector<size_t>& GetIndices()const HBUFF_NOEXCEPT{return (std::vector<size_t>&)m_Indices;}
 private:
     std::vector<HBuffer, Allocator> m_Vectors;
     /// @brief a vector where each node contains the sizes of all vectors before it
