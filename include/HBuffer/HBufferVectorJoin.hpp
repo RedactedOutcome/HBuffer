@@ -206,6 +206,10 @@ public:
         m_Vectors.erase(m_Vectors.begin() + at);
         m_Indices.erase(m_Indices.begin() + at);
     }
+
+    HBuffer& Back()const HBUFF_NOEXCEPT{
+        return (HBuffer&)m_Vectors.back();
+    }
 public:
     std::vector<HBuffer, Allocator>& GetVectors()const HBUFF_NOEXCEPT{return (std::vector<HBuffer, Allocator>&)m_Vectors;}
     std::vector<size_t>& GetIndices()const HBUFF_NOEXCEPT{return (std::vector<size_t>&)m_Indices;}

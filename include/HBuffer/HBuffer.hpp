@@ -1233,7 +1233,7 @@ public:
         }
         return *this;
     }
-
+    
     /// @brief Makes sure there is a null terminator at the end of the buffer and returns the buffers data. Might of just made this for nothing
     const char* TurnToSafeCString() HBUFF_NOEXCEPT{
         if(m_Capacity <= m_Size){
