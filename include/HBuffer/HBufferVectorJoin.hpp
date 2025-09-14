@@ -144,7 +144,7 @@ public:
     HBufferVectorJoinIndexInfo GetInfo(size_t at)const HBUFF_NOEXCEPT{
         for(size_t i = 0; i < m_Indices.size(); i++){
             size_t totalBefore = m_Indices[i];
-            HBuffer& vector = m_Vectors[i];
+            HBuffer vector = m_Vectors[i];
             if(totalBefore + vector.GetSize() < at)continue;
             HBufferVectorJoinIndexInfo info;
             info.m_Vector = vector;
