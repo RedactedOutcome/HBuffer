@@ -124,6 +124,11 @@ public:
 
         return join;
     }
+    
+    size_t GetSize()const noexcept{
+        if(m_Indices.size() < 1)return;
+        return *m_Indices.back() + m_Vectors.back()->GetSize();
+    }
 
     template <typename... Args>
     void EmplaceBack(Args&&... args){
