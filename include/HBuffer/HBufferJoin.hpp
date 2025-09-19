@@ -381,6 +381,7 @@ public:
                 strPos++;
             }
         }
+        i = std::min(i, i - len1);
         while(true){
             if(strPos == len)return 0;
             if(i >= len2)return -1;
