@@ -367,16 +367,20 @@ public:
         size_t len1 = m_Buffer1.GetSize();
         size_t len2 = m_Buffer2.GetSize();
         size_t i = at, strPos = 0;
-        
-        while(true){
-            if(strPos == len)return 0;
-            if(i >= len1)break;
-            if(str[strPos] != str1[i])return 1;
-            i++;
-            strPos++;
-        }
 
-        i=0;
+        if(i < len1){
+            ///Use first buffer
+            while(true){
+                if(strPos == len)return 0;
+                if(i >= len1){
+                    i = 0;
+                    break;
+                }
+                if(str[strPos] != str1[i])return 1;
+                i++;
+                strPos++;
+            }
+        }
         while(true){
             if(strPos == len)return 0;
             if(i >= len2)return -1;
