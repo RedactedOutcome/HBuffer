@@ -9,8 +9,10 @@ public:
     HBufferJoin(HBuffer&& buff1) HBUFF_NOEXCEPT : m_Buffer1(buff1){}
     HBufferJoin(HBuffer&& buff1, HBuffer&& buff2) HBUFF_NOEXCEPT : m_Buffer1(buff1), m_Buffer2(buff2){}
     //TODO: possible copy constructor
-    //TODO: maybe just make move constructor move the HBuffers inside them
-    HBufferJoin(HBufferJoin&&) = delete;
+    HBufferJoin(HBufferJoin&& join)noexcept{
+        m_Buffer1 = std::move(join.m_Buffer1);
+        m_Buffer2 = std::move(join.m_Buffer2);
+    }
     ~HBufferJoin(){}
 
     /// @brief calls Free() on buffers
