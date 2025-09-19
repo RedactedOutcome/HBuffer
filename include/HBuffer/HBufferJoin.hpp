@@ -373,7 +373,7 @@ public:
             while(true){
                 if(strPos == len)return 0;
                 if(i >= len1){
-                    i = 0;
+                    //i = 0;
                     break;
                 }
                 if(str[strPos] != str1[i])return 1;
@@ -381,7 +381,7 @@ public:
                 strPos++;
             }
         }
-        i = std::min(i, i - len1);
+        i -= len1;
         while(true){
             if(strPos == len)return 0;
             if(i >= len2)return -1;
