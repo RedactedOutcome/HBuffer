@@ -59,7 +59,7 @@ public:
         if(pos >= totalLength)
             return HBuffer("", 0, 1, false, false);
         
-        size_t bufferLeft = totalLength - pos;
+        size_t bufferLeft = totalLength - std::min(totalLength, pos);
         len = std::min(bufferLeft, len);
 
         if(len < 1)return HBuffer(nullptr, 0, false, false);
