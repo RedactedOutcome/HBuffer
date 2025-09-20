@@ -77,6 +77,7 @@ public:
         memcpy(str, str1 + pos, newLen1);
         memcpy(str + newLen1, str2 + (pos < len1 ? 0 : pos - len1), newLen2);
         memset(str + len, '\0', 1);
+        std::cout << "Done " << totalLen<<std::endl;
 
         return HBuffer(str, len, len + 1, true, true);
     }
