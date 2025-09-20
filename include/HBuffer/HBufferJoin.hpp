@@ -39,7 +39,7 @@ public:
             i++;
         }
 
-        i = 0;
+        i -= len1;
         while(true){
             if(i == len2)break;
             if(str2[i] == delimeter)break;
