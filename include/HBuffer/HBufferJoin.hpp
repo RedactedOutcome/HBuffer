@@ -61,12 +61,16 @@ public:
         
         size_t bufferLeft = totalLength - pos;
         len = std::min(bufferLeft, len);
-        //Or maybe out of range exception
+
         if(len < 1)return HBuffer(nullptr, 0, false, false);
+        
         char* str = new char[len + 1];
+
         std::cout << "Pos " << pos << "Len "<< len<<std::endl;
         std::cout << "Len1 " << len1 << " Len2 "<< len2<< "Total " << totalLength<<std::endl;
-        size_t newLen1 = std::min(len1 - std::min(pos, len1), bufferLeft);
+
+        size_t newLen1 = std::min(len, len1 - std::min(len1, pos));
+        //size_t newLen1 = std::min(len1 - std::min(pos, len1), bufferLeft);
         size_t newLen2 = std::min(pos >= len1 ? (len2 - pos) : len2, len);
         size_t totalLen = newLen1 + newLen2;
         std::cout << "new Len1 " << newLen1 << " new Len2 "<< newLen2<< "new Total " << totalLen<<std::endl;
