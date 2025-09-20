@@ -8,7 +8,10 @@ public:
     HBufferJoin(HBuffer& buff1, HBuffer& buff2) HBUFF_NOEXCEPT : m_Buffer1(buff1), m_Buffer2(buff2){}
     HBufferJoin(HBuffer&& buff1) HBUFF_NOEXCEPT : m_Buffer1(buff1){}
     HBufferJoin(HBuffer&& buff1, HBuffer&& buff2) HBUFF_NOEXCEPT : m_Buffer1(buff1), m_Buffer2(buff2){}
-    //TODO: possible copy constructor
+    HBufferJoin(const HBufferJoin& join)noexcept{
+        m_Buffer1 = join.m_Buffer1;
+        m_Buffer2 = join.m_Buffer2;
+    }
     HBufferJoin(HBufferJoin&& join)noexcept{
         m_Buffer1 = std::move(join.m_Buffer1);
         m_Buffer2 = std::move(join.m_Buffer2);
@@ -392,6 +395,17 @@ public:
             strPos++;
         }
         return 0;
+    }
+public:
+    HBuffer& operator=(const HBufferJoin& right)noexcept{
+        m_Buffer1 = right.m_Buffer1;
+        m_Buffer2 = right.m_Buffer2;
+        return *this;
+    }
+    HBuffer& operator=(HBufferJoin&& right)noexcept{
+        m_Buffer1 = std::move(right.m_Buffer1);
+        m_Buffer2 = std::move(right.m_Buffer2);
+        return *this;
     }
 public:
     /// @brief attempts to get the byte from the join at index i. Does not do safety checks so there is segfault potential.
