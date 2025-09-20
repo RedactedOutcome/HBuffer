@@ -70,13 +70,12 @@ public:
         std::cout << "Len1 " << len1 << " Len2 "<< len2<< "Total " << totalLength<<std::endl;
 
         size_t newLen1 = std::min(len, len1 - std::min(len1, pos));
-        //size_t newLen1 = std::min(len1 - std::min(pos, len1), bufferLeft);
-        size_t newLen2 = std::min(pos >= len1 ? (len2 - pos) : len2, len);
+        size_t newLen2 = std::min(len2 - (pos >= len1 ? pos - len1 : 0), bufferLeft - newLen1);
         size_t totalLen = newLen1 + newLen2;
         std::cout << "new Len1 " << newLen1 << " new Len2 "<< newLen2<< "new Total " << totalLen<<std::endl;
         
         memcpy(str, str1 + pos, newLen1);
-        memcpy(str + newLen1, str2 + std::min(len1 - pos, pos), newLen2);
+        memcpy(str + newLen1, str2 + (pos < len1 ? 0 : pos - len1), newLen2);
         memset(str + len, '\0', 1);
 
         return HBuffer(str, len, len + 1, true, true);
