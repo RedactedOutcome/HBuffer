@@ -397,12 +397,12 @@ public:
         return 0;
     }
 public:
-    HBuffer& operator=(const HBufferJoin& right)noexcept{
+    HBufferJoin& operator=(const HBufferJoin& right)noexcept{
         m_Buffer1 = right.m_Buffer1;
         m_Buffer2 = right.m_Buffer2;
         return *this;
     }
-    HBuffer& operator=(HBufferJoin&& right)noexcept{
+    HBufferJoin& operator=(HBufferJoin&& right)noexcept{
         m_Buffer1 = std::move(right.m_Buffer1);
         m_Buffer2 = std::move(right.m_Buffer2);
         return *this;
