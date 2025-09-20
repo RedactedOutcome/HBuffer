@@ -65,8 +65,8 @@ public:
         if(len < 1)return HBuffer(nullptr, 0, false, false);
         char* str = new char[len + 1];
 
-        size_t newLen1 = std::min(len, len1 - pos);
-        size_t newLen2 = std::min(bufferLeft - newLen1, len - newLen1);
+        size_t newLen1 = std::min(len1 - std::min(pos, len1), bufferLeft);
+        size_t newLen2 = std::min(pos >= len1 ? (len2 - pos) : len2, len);
         size_t totalLen = newLen1 + newLen2;
         
         memcpy(str, str1 + pos, newLen1);
@@ -354,7 +354,7 @@ public:
             strPos++;
         }
 
-        i=0;
+        i-=len1;
         while(true){
             if(strPos == len)return 0;
             if(i == len2)return -1;
@@ -373,18 +373,16 @@ public:
         size_t len2 = m_Buffer2.GetSize();
         size_t i = at, strPos = 0;
 
-        if(i < len1){
-            ///Use first buffer
-            while(true){
-                if(strPos == len)return 0;
-                if(i >= len1){
-                    //i = 0;
-                    break;
-                }
-                if(str[strPos] != str1[i])return 1;
-                i++;
-                strPos++;
+        ///Use first buffer
+        while(true){
+            if(strPos == len)return 0;
+            if(i >= len1){
+                //i = 0;
+                break;
             }
+            if(str[strPos] != str1[i])return 1;
+            i++;
+            strPos++;
         }
         i -= len1;
         while(true){
