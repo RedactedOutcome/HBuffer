@@ -382,7 +382,6 @@ public:
         //Part1 Change - 0
         //From - 29
         //Desired new size - 80
-        std::cout << "Start"<<std::endl;
         size_t otherSize = food.m_Size;
         size_t totalSize = m_Size + otherSize;
         size_t newLen1 = m_Size - std::min(from, m_Size);
@@ -402,32 +401,6 @@ public:
         }
         memcpy(m_Data + newLen1, food.m_Data + from - std::min(m_Size, from), newLen2);
         m_Size = newSize;
-        std::cout << "Done"<<std::endl;
-        /*
-        m_Size = newSize;
-        size_t otherSize = food.m_Size;
-        size_t totalSize = m_Size + otherSize;
-
-        size_t part1Change = std::min(from, m_Size);
-        size_t newPart1Size = (m_Size - part1Change);
-        size_t part2Change = std::min(from <= m_Size ? 0 : from - m_Size, otherSize);
-        size_t newPart2Size = otherSize - part2Change;
-        size_t newBuffSize = newPart1Size + newPart2Size;
-        
-        if(newBuffSize > m_Capacity || !m_CanModify || !m_Data){
-            m_Capacity = newBuffSize;
-            char* newData = new char[newBuffSize];
-            memcpy(newData, m_Data + from, newPart1Size);
-            if(m_CanFree)delete m_Data;
-            m_Data = newData;
-            m_CanFree = true;
-            m_CanModify = true;
-        }
-        else
-            memcpy(m_Data, m_Data + from, newPart1Size);
-        memcpy(m_Data + newPart1Size, food.m_Data + part2Change, newPart2Size);
-        m_Size = newBuffSize;
-        */
     }
 
     void InsertAt(size_t at, const HBuffer& buffer) noexcept{
