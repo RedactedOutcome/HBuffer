@@ -400,6 +400,7 @@ public:
             memcpy(m_Data, m_Data + from, newLen1);
         }
         memcpy(m_Data + newLen1, food.m_Data + from - std::min(m_Size, from), newLen2);
+        m_Size = newSize;
         /*
         m_Size = newSize;
         size_t otherSize = food.m_Size;
