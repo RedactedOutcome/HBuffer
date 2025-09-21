@@ -384,6 +384,26 @@ public:
         //Desired new size - 80
         size_t otherSize = food.m_Size;
         size_t totalSize = m_Size + otherSize;
+        size_t newLen1 = m_Size - std::min(from, m_Size);
+        size_t newLen2 = otherSize - (from >= m_Size ? std::min(otherSize, from - m_Size) : 0);
+        size_t newSize = newLen1 + newLen2;
+
+        if(newSize > m_Capacity || !m_CanModify || !m_Data){
+            m_Capacity = newSize;
+            char* data = new char[m_Capacity];
+            memcpy(data, m_Data + from, newLen1);
+            Delete();
+            m_Data = data;
+            m_CanFree = true;
+            m_CanModify = true;
+        }else{
+            memcpy(m_Data, m_Data + from, newLen1);
+        }
+        memcpy(m_Data + newLen1, food.m_Data + from - std::min(m_Size, from), newLen2);
+        /*
+        m_Size = newSize;
+        size_t otherSize = food.m_Size;
+        size_t totalSize = m_Size + otherSize;
 
         size_t part1Change = std::min(from, m_Size);
         size_t newPart1Size = (m_Size - part1Change);
@@ -404,6 +424,7 @@ public:
             memcpy(m_Data, m_Data + from, newPart1Size);
         memcpy(m_Data + newPart1Size, food.m_Data + part2Change, newPart2Size);
         m_Size = newBuffSize;
+        */
     }
 
     void InsertAt(size_t at, const HBuffer& buffer) noexcept{
