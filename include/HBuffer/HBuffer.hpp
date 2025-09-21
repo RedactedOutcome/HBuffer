@@ -382,6 +382,7 @@ public:
         //Part1 Change - 0
         //From - 29
         //Desired new size - 80
+        std::cout << "Start"<<std::endl;
         size_t otherSize = food.m_Size;
         size_t totalSize = m_Size + otherSize;
         size_t newLen1 = m_Size - std::min(from, m_Size);
@@ -401,6 +402,7 @@ public:
         }
         memcpy(m_Data + newLen1, food.m_Data + from - std::min(m_Size, from), newLen2);
         m_Size = newSize;
+        std::cout << "Done"<<std::endl;
         /*
         m_Size = newSize;
         size_t otherSize = food.m_Size;
