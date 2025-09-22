@@ -65,7 +65,7 @@ public:
         if(len < 1)return HBuffer("", 0, 1, false, false);
         
         char* str = new char[len + 1];
-
+        std::cout << "At, len " << pos << ", " << len<<std::endl;
         std::cout << "Lengths " << len1 << ", " << len2 << "," << totalLength<<std::endl;
         size_t newLen1 = len1 - std::min(len1, pos);
         size_t newLen2 = len2 - (pos >= len1 ? std::min(len2, pos - len1) : 0);
