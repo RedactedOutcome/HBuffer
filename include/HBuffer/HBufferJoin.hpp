@@ -91,18 +91,16 @@ public:
         if(pos >= totalLength)
             return HBuffer(nullptr, 0, false, false);
 
-        len = std::min(len, totalLength - pos);
+        len = std::min(len, totalLength - std::min(totalLength, pos));
         //Or maybe out of range exception
         if(len < 1)return HBuffer(nullptr, 0, false, false);
-        char* str = new char[len];
+        size_t newLen1 = std::min(len, len1 - std::min(len1, pos));
+        size_t newLen2 = std::min(len2 - (pos >= len1 ? std::min(len2, pos - len1) : 0), len - len1);
+        size_t totalLen = newLen1 + newLen2;
+        char* str = new char[totalLen];
         
-        size_t buff1FillSize = 0;
-        if(pos < len1){
-            //Use first buffer
-            buff1FillSize = std::min(len, len1 - pos);
-            memcpy(str, str1 + pos, buff1FillSize);
-        }
-        memcpy(str + buff1FillSize, str2 + (std::max(pos, len1) - len1), std::min(len - buff1FillSize, len2 - pos - buff1FillSize));
+        memcpy(str, str1 + pos, newLen1);
+        memcpy(str + newLen1, str2 + (pos < len1 ? 0 : pos - len1), newLen2);
         return HBuffer(str, len, true, true);
     }
 public:
