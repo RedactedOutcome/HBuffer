@@ -66,9 +66,12 @@ public:
         
         char* str = new char[len + 1];
 
+        std::cout << "Lengths " << len1 << ", " << len2 << "," << totalLength;
         size_t newLen1 = len1 - std::min(len1, pos);
         size_t newLen2 = len2 - (pos >= len1 ? std::min(len2, pos - len1) : 0);
         size_t totalLen = newLen1 + newLen2;
+
+        std::cout << "New Lenghts " << newLen1 << ", " << newLen2 << "," << totalLen;
 
         memcpy(str, str1 + pos, newLen1);
         memcpy(str + newLen1, str2 + (pos < len1 ? 0 : pos - len1), newLen2);
