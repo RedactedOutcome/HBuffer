@@ -39,7 +39,7 @@ public:
             i++;
         }
 
-        i -= len1;
+        i = 0;
         while(true){
             if(i == len2)break;
             if(str2[i] == delimeter)break;
@@ -98,7 +98,7 @@ public:
         size_t newLen2 = std::min(len2 - (pos >= len1 ? std::min(len2, pos - len1) : 0), len - len1);
         size_t totalLen = newLen1 + newLen2;
         char* str = new char[totalLen];
-        
+
         memcpy(str, str1 + pos, newLen1);
         memcpy(str + newLen1, str2 + (pos < len1 ? 0 : pos - len1), newLen2);
         return HBuffer(str, len, true, true);
