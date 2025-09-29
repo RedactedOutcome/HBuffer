@@ -1422,7 +1422,7 @@ std::ostream& operator<<(std::ostream& os, const HBuffer& buff){
 }
 
 #ifdef HBUFF_USE_FMT_LOGGER
-template <> struct fmt::formatter<HBuffer> : ostream_formatter {};
+//template <> struct fmt::formatter<HBuffer> : ostream_formatter {};
 #endif
 namespace std {
     template<>
