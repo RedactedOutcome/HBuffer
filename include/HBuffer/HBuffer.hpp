@@ -385,6 +385,7 @@ public:
         size_t otherSize = food.m_Size;
         size_t totalSize = m_Size + otherSize;
         from = std::min(totalSize, from);
+        
         size_t newLen1 = m_Size - std::min(from, m_Size);
         size_t newLen2 = otherSize - (from >= m_Size ? std::min(otherSize, from - m_Size) : 0);
         size_t newSize = newLen1 + newLen2;
@@ -1415,6 +1416,9 @@ private:
     bool m_CanModify = false;
 };
 
+std::ostream& operator<<(std::ostream& os, const HBuffer& buff){
+    os<<buff.SubString(0,-1).GetCStr();
+}
 namespace std {
     template<>
     struct hash<HBuffer> {
