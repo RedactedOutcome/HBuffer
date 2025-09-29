@@ -1427,7 +1427,7 @@ struct fmt::formatter<HBuffer> {
     constexpr auto parse(fmt::format_parse_context& ctx) { return ctx.begin(); }
 
     template <typename FormatContext>
-    auto format(const HBuffer& buff, FormatContext& ctx) {
+    auto format(const HBuffer& buff, FormatContext& ctx) const{
         // safely use HBuffer's API
         return fmt::format_to(ctx.out(), "{}", buff.SubString(0, -1).GetCStr());
     }
