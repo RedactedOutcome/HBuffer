@@ -1418,6 +1418,7 @@ private:
 
 std::ostream& operator<<(std::ostream& os, const HBuffer& buff){
     os<<buff.SubString(0,-1).GetCStr();
+    return os;
 }
 namespace std {
     template<>
