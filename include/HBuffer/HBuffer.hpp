@@ -1416,11 +1416,6 @@ private:
     bool m_CanModify = false;
 };
 
-std::ostream& operator<<(std::ostream& os, const HBuffer& buff){
-    os<<buff.SubString(0,-1).GetCStr();
-    return os;
-}
-
 #ifdef HBUFF_USE_FMT_LOGGER
 template <>
 struct fmt::formatter<HBuffer> {
