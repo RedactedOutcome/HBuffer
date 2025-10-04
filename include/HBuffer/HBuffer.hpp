@@ -801,13 +801,12 @@ public:
     /// @param at the location in the buffer that will start filling up the substring
     /// @param len the amount of characters to copy to new buffer. If -1 than whole buffer else caps out on buffer
     HBuffer SubString(size_t at, size_t len) const HBUFF_NOEXCEPT{
-        len = std::min(len, m_Size);
-        len -= std::min(at, len);
+        size_t size = std::min(len, m_Size) - std::min(at, m_Size)
 
-        char* newData = new char[len + 1];
-        newData[len] = 0;
-        memcpy(newData, m_Data + at, len);
-        return HBuffer(newData, len, len + 1, true, true);
+        char* newData = new char[size + 1];
+        newData[size] = 0;
+        memcpy(newData, m_Data + at, size);
+        return HBuffer(newData, size, size + 1, true, true);
     }
 
     /// @brief Allocates a new copy of the buffer up to the size of the buffer
