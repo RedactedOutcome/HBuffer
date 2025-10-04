@@ -805,6 +805,7 @@ public:
         len -= std::min(at, len);
 
         char* newData = new char[len + 1];
+        newData[len] = 0;
         memcpy(newData, m_Data + at, len);
         return HBuffer(newData, len, len + 1, true, true);
     }
