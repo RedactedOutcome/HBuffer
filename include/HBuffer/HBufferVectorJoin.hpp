@@ -87,7 +87,7 @@ public:
         HBuffer& vec = m_Vectors[index];
         size_t relativeAt = at - totalBefore;
         /// TODO: think and maybe change to vec.At()
-        return vec[relativeAt]
+        return vec[relativeAt];
     }
 
     /// @brief creates a single null terminated ascii string starting at at and is size len
