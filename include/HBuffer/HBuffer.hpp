@@ -187,10 +187,10 @@ public:
         m_CanModify = true;
     }
 
-    /// @brief Reserves param newCapacity + 1 bytes in memory. With the additional byte being the null terminator.
+    /// @brief Reserves newCapacity of bytes for a string. excluding the additional byte for the null terminator
     void ReserveString(size_t newCapacity) HBUFF_NOEXCEPT{
         newCapacity++;
-        if(newCapacity < m_Capacity)return;
+        if(newCapacity <= m_Capacity)return;
         m_Capacity = newCapacity;
         char* data = new char[m_Capacity];
         memcpy(data, m_Data, m_Size);
