@@ -986,6 +986,7 @@ public:
             char* data = new char[newSize];
             memcpy(data, buff.m_Data, m_Capacity);
             m_Capacity = newSize;
+            m_Size = newSize;
             m_Data = data;
             m_CanFree = true;
             m_CanModify = true;
