@@ -984,7 +984,7 @@ public:
         if(!m_Data || !m_CanModify || newSize > m_Capacity){
             Delete();
             char* data = new char[newSize];
-            memcpy(data, buff.m_Data, m_Capacity);
+            memcpy(data, buff.m_Data, m_Size);
             m_Capacity = newSize;
             m_Size = newSize;
             m_Data = data;
@@ -993,8 +993,8 @@ public:
             return;
         }
         //Copy data into buff
-        memcpy(m_Data, buff.m_Data, m_Size);
         m_Size = newSize;
+        memcpy(m_Data, buff.m_Data, m_Size);
     }
 
     ///@brief The exact same as Copy(const char*) except we add a null terminator at the end to our buffer without including the null terminator in size/capacity. This essentially makes the buffer a string
