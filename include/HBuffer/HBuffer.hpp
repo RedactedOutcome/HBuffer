@@ -980,7 +980,6 @@ public:
     /// @param buff the HBuffer to make a copy of
     void Copy(const HBuffer& buff)HBUFF_NOEXCEPT{
         size_t newSize = buff.m_Size;
-        if(m_Size < 1)return;
         if(!m_Data || !m_CanModify || newSize > m_Capacity){
             Delete();
             char* data = new char[newSize];
