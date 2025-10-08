@@ -979,13 +979,13 @@ public:
     /// @brief Makes an exact owning copy of param buff. Frees and reallocates if no self has no valid data ptr, cant modify self, or self size > capacity.
     /// @param buff the HBuffer to make a copy of
     void Copy(const HBuffer& buff)HBUFF_NOEXCEPT{
-        m_Size = buff.m_Size;
+        size_t newSize = buff.m_Size;
         if(m_Size < 1)return;
-        if(!m_Data || !m_CanModify || m_Size > m_Capacity){
+        if(!m_Data || !m_CanModify || newSize > m_Capacity){
             Delete();
-            m_Capacity = m_Size;
-            char* data = new char[m_Capacity];
+            char* data = new char[newSize];
             memcpy(data, buff.m_Data, m_Capacity);
+            m_Capacity = newSize;
             m_Data = data;
             m_CanFree = true;
             m_CanModify = true;
@@ -993,6 +993,7 @@ public:
         }
         //Copy data into buff
         memcpy(m_Data, buff.m_Data, m_Size);
+        m_Size = newSize;
     }
 
     ///@brief The exact same as Copy(const char*) except we add a null terminator at the end to our buffer without including the null terminator in size/capacity. This essentially makes the buffer a string
