@@ -828,7 +828,9 @@ public:
     /// @brief Create a new HBuffer that points to the same data as the current one but with an offset and or different size
     /// @param allowModify a check to allow this subpointer to modify data as long as the main buffer also can modify this data
     HBuffer SubPointer(size_t at, size_t len, bool allowModify = true) const noexcept{
-        return HBuffer(m_Data + at, std::min(m_Size - at, len), false, allowModify && m_CanModify);
+        if(at >= m_Size)return HBuffer();
+        size_t size = std::min(len, m_Size - at);
+        return HBuffer(m_Data + at, size, false, allowModify && m_CanModify);
     }
 
     /// @brief sam as substring without null terminator. allocates a subbuffer of buffer starting at param at with a length of len.
@@ -1077,6 +1079,22 @@ public:
 
         memcpy(m_Data, buff.m_Data, m_Size);
         m_Data[m_Size] = '\0';
+    }
+public:
+    template<typename Allocator=std::allocator<HBuffer>>
+    std::vector<HBuffer, Allocator> SplitByDelimiter> SubPointerSplitByDelimiter(char delim)const noexcept{
+        std::vector<HBuffer, Allocator> parts;
+        size_t lastAt = 0;
+        size_t i;
+        for(i = 0; i < m_Size; i++){
+            char c = m_Data[i];
+            if(c == delim){
+                parts.emplace_back(SubPointer(lastAt, i))
+                lastAt = i + 1;
+            }
+        }
+        if(lastAt < m_Size)parts.emplace_back(SubPointer(lastAt, i));
+        return parts;
     }
 
 public:
