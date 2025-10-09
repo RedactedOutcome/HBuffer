@@ -1082,7 +1082,7 @@ public:
     }
 public:
     template<typename Allocator=std::allocator<HBuffer>>
-    std::vector<HBuffer, Allocator> SplitByDelimiter> SubPointerSplitByDelimiter(char delim)const noexcept{
+    std::vector<HBuffer, Allocator> SubPointerSplitByDelimiter(char delim)const noexcept{
         std::vector<HBuffer, Allocator> parts;
         size_t lastAt = 0;
         size_t i;
