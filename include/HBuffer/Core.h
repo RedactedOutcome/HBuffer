@@ -14,6 +14,7 @@
 #include <map>
 #include <memory>
 #include <algorithm>
+#include <vector>
 
 #endif
 //#if __cplusplus < 201103L
