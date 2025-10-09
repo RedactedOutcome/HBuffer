@@ -1081,8 +1081,10 @@ public:
         m_Data[m_Size] = '\0';
     }
 public:
+    /// @brief Splits the buffer into multiple sub pointers with a delimiter
+    /// @param max the max amount of times to split by delimiter
     template<typename Allocator=std::allocator<HBuffer>>
-    std::vector<HBuffer, Allocator> SubPointerSplitByDelimiter(char delim)const noexcept{
+    std::vector<HBuffer, Allocator> SubPointerSplitByDelimiter(char delim, size_t max=-1)const noexcept{
         std::vector<HBuffer, Allocator> parts;
         size_t lastAt = 0;
         size_t i;
@@ -1091,9 +1093,13 @@ public:
             if(c == delim){
                 parts.emplace_back(SubPointer(lastAt, i))
                 lastAt = i + 1;
+                max--;
+                if(max==0){
+                    break;
+                }
             }
         }
-        if(lastAt < m_Size)parts.emplace_back(SubPointer(lastAt, i));
+        if(lastAt < m_Size)parts.emplace_back(SubPointer(lastAt, -1));
         return parts;
     }
 
