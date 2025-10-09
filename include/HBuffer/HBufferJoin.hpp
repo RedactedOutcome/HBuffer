@@ -360,7 +360,6 @@ public:
             i++;
             strPos++;
         }
-        return 0;
     }
     int StrXCmp(size_t at, const char* str) const HBUFF_NOEXCEPT{
         size_t len = strlen(str);
@@ -390,7 +389,6 @@ public:
             i++;
             strPos++;
         }
-        return 0;
     }
 public:
     HBufferJoin& operator=(const HBufferJoin& right)noexcept{
