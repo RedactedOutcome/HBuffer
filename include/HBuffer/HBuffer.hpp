@@ -827,10 +827,10 @@ public:
 
     /// @brief Create a new HBuffer that points to the same data as the current one but with an offset and or different size
     /// @param allowModify a check to allow this subpointer to modify data as long as the main buffer also can modify this data
-    HBuffer SubPointer(size_t at, size_t len, bool allowModify = true) const noexcept{
+    HBuffer SubPointer(size_t at, size_t len=-1, bool allowModify = true) const noexcept{
         if(at >= m_Size)return HBuffer();
         size_t size = std::min(len, m_Size - at);
-        return HBuffer(m_Data + at, size, false, allowModify && m_CanModify);
+        return HBuffer(m_Data + at, size, m_Capacity - at, false, allowModify && m_CanModify);
     }
 
     /// @brief sam as substring without null terminator. allocates a subbuffer of buffer starting at param at with a length of len.
