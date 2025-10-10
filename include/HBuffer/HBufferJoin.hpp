@@ -96,7 +96,7 @@ public:
 
         memcpy(str, str1 + pos, newLen1);
         memcpy(str + newLen1, str2 + (pos < len1 ? 0 : pos - len1), newLen2);
-        return HBuffer(str, len, true, true);
+        return HBuffer(str, totalLen, true, true);
     }
 public:
     bool StartsWith(size_t at, const char* str) const HBUFF_NOEXCEPT{
