@@ -82,6 +82,7 @@ public:
         size_t len1 = m_Buffer1.GetSize();
         size_t len2 = m_Buffer2.GetSize();
         size_t totalLength = len1 + len2;
+        std::cout<<totalLength <<std::endl;
 
         if(pos >= totalLength)
             return HBuffer(nullptr, 0, false, false);
