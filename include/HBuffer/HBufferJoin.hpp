@@ -59,11 +59,11 @@ public:
         if(pos >= totalLength)
             return HBuffer(nullptr, 0, 0, false, false);
         
-        size_t bufferLeft = totalLength - pos;
+        len = std::min(totalLength - pos, len);
 
         //size_t newLen1 = std::min(len, len1 - std::min(len1, pos));
-        size_t newLen1 = std::min(bufferLeft, len1 - (pos >= len1 ? len1 : pos));
-        size_t newLen2 = std::min(bufferLeft - newLen1, len2 - (pos >= len1 ? pos - len1: 0));
+        size_t newLen1 = std::min(len, len1 - (pos >= len1 ? len1 : pos));
+        size_t newLen2 = std::min(len - newLen1, len2 - (pos >= len1 ? pos - len1: 0));
         //size_t newLen2 = std::min(len2 - (pos >= len1 ? std::min(len2, pos - len1) : 0), len - len1);
         size_t totalLen = newLen1 + newLen2;
         char* str = new char[totalLen + 1];
@@ -72,7 +72,7 @@ public:
         memcpy(str + newLen1, str2 + (pos <= len1 ? 0 : pos - len1), newLen2);
         memset(str + totalLen, '\0', 1);
         
-        return HBuffer(str, totalLen, totalLen + 1, true, true);
+        return HBuffer(str, len, len + 1, true, true);
     }
     
     HBuffer SubBuffer(size_t pos, size_t len) const HBUFF_NOEXCEPT{
@@ -85,8 +85,8 @@ public:
 
         if(pos >= totalLength)
             return HBuffer(nullptr, 0, false, false);
+        len = std::min(totalLength - pos, len);
 
-        len = std::min(len, totalLength - std::min(totalLength, pos));
         //Or maybe out of range exception
         if(len < 1)return HBuffer(nullptr, 0, false, false);
         size_t newLen1 = std::min(len, len1 - (pos >= len1 ? len1 : pos));
@@ -95,8 +95,8 @@ public:
         char* str = new char[totalLen];
 
         memcpy(str, str1 + pos, newLen1);
-        memcpy(str + newLen1, str2 + (pos < len1 ? 0 : pos - len1), newLen2);
-        return HBuffer(str, totalLen, true, true);
+        memcpy(str + newLen1, str2 + (pos <= len1 ? 0 : pos - len1), newLen2);
+        return HBuffer(str, len, true, true);
     }
 public:
     bool StartsWith(size_t at, const char* str) const HBUFF_NOEXCEPT{
