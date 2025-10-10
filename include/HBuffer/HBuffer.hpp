@@ -1092,7 +1092,7 @@ public:
             char c = m_Data[i];
             if(c == delim){
                 parts.emplace_back(SubPointer(lastAt, i));
-                lastAt = i + 1;
+                lastAt = i ;
                 max--;
                 if(max==0){
                     break;
