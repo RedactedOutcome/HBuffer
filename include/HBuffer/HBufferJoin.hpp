@@ -59,18 +59,20 @@ public:
         if(pos >= totalLength)
             return HBuffer("", 0, 1, false, false);
         
-        size_t bufferLeft = totalLength - std::min(totalLength, pos);
+        size_t bufferLeft = totalLength - pos;
         len = std::min(bufferLeft, len);
 
         if(len < 1)return HBuffer("", 0, 1, false, false);
 
-        size_t newLen1 = std::min(len, len1 - std::min(len1, pos));
-        size_t newLen2 = std::min(len2 - (pos >= len1 ? std::min(len2, pos - len1) : 0), len - len1);
+        //size_t newLen1 = std::min(len, len1 - std::min(len1, pos));
+        size_t newLen1 = std::min(len, len1 - (pos >= len1 ? len1 : pos));
+        size_t newLen2 = std::min(len - newLen1, len2 - (pos >= len1 ? pos : 0));
+        //size_t newLen2 = std::min(len2 - (pos >= len1 ? std::min(len2, pos - len1) : 0), len - len1);
         size_t totalLen = newLen1 + newLen2;
         char* str = new char[totalLen + 1];
         
         memcpy(str, str1 + pos, newLen1);
-        memcpy(str + newLen1, str2 + (pos < len1 ? 0 : pos - len1), newLen2);
+        memcpy(str + newLen1, str2 + (pos <= len1 ? 0 : pos - len1), newLen2);
         memset(str + len, '\0', 1);
         
         return HBuffer(str, len, len + 1, true, true);
