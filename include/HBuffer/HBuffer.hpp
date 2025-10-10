@@ -1091,7 +1091,7 @@ public:
         for(i = 0; i < m_Size; i++){
             char c = m_Data[i];
             if(c == delim){
-                parts.emplace_back(SubPointer(lastAt, i));
+                parts.emplace_back(SubPointer(lastAt, i - lastAt));
                 lastAt = i +1;
                 max--;
                 if(max==0){
