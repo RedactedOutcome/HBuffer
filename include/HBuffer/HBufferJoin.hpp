@@ -48,7 +48,7 @@ public:
         //TODO: Do substringing inside
         return SubString(0, i);
     }
-    HBuffer SubString(size_t pos, size_t len) const HBUFF_NOEXCEPT{
+    HBuffer SubString(size_t pos, size_t len=-1) const HBUFF_NOEXCEPT{
         const char* str1 = m_Buffer1.GetData();
         const char* str2 = m_Buffer2.GetData();
 
@@ -73,7 +73,7 @@ public:
         
         memcpy(str, str1 + pos, newLen1);
         memcpy(str + newLen1, str2 + (pos <= len1 ? 0 : pos - len1), newLen2);
-        memset(str + len, '\0', 1);
+        memset(str + totalLen, '\0', 1);
         
         return HBuffer(str, len, len + 1, true, true);
     }
