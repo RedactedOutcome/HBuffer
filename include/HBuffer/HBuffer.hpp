@@ -294,7 +294,7 @@ public:
         bool decimalPlaced = false;
         for(size_t i = 0; i < m_Size; i++){
             char c = m_Data[i];
-            if(c >= '0' && c<= '0'){
+            if(c >= '0' && c<= '9'){
                 c-='0';
                 if(!decimalPlaced){
                     output *=10;
