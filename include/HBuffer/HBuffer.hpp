@@ -294,7 +294,8 @@ public:
         bool decimalPlaced = false;
         for(size_t i = 0; i < m_Size; i++){
             char c = m_Data[i];
-            if(c >= 0 && c<= 9){
+            if(c >= '0' && c<= '0'){
+                c-='0';
                 if(!decimalPlaced){
                     output *=10;
                     output+=c;
@@ -309,7 +310,6 @@ public:
                 decimalPlaced=true; 
                 continue;
             }
-            std::cout << "C" << c<<std::endl;
             return false;
         }
         return true;
