@@ -239,6 +239,7 @@ public:
         memset(data + size, '\0', 1);
         return HBuffer(data, size, newCapacity, true, true);
     }
+#pragma region Numbers
     /// @brief returns a new HBuffer with an ascii encoded base 10 string
     static HBuffer ToString(size_t number) HBUFF_NOEXCEPT{
         HBuffer buffer;
@@ -271,7 +272,6 @@ public:
         return buffer;
     }
 
-
     /// @brief Assumes data in param buffer is a ascii encoded numerical base 10 string.
     /// @param output a pointer to a size_t to store the result
     static void StrictToNumber(const HBuffer& buffer, size_t* output) HBUFF_NOEXCEPT{
@@ -284,6 +284,38 @@ public:
 
         *output = number;
     }
+
+    /// @brief Attempts to convert the string to a float
+    /// @return true if success, false if otherwise
+    bool ToFloat(float& output)HBUFF_NOEXCEPT{
+        output = 0;
+
+        float multiplier = 1;
+        bool decimalPlaced = false;
+        for(size_t i = 0; i < m_Size; i++){
+            char c = m_Data[i];
+            if(c >= 0 && c<= 9){
+                if(!decimalPlaced){
+                    output *=10;
+                    output+=c;
+                    continue;
+                }
+
+                multiplier *= 0.1;
+                output += c * multiplier;
+                continue;
+            }
+            if(c == '.'){
+                decimalPlaced=true;
+                continue;
+            }
+            
+            return false;
+        }
+        return true;
+    }
+#pragma endregion
+public:
     /// @brief Makes buffer point to a null terminated string literal
     /// @param str the string to point to
     /// @param canFree do we own this data
