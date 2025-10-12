@@ -306,10 +306,10 @@ public:
                 continue;
             }
             if(c == '.'){
-                decimalPlaced=true;
+                decimalPlaced=true; 
                 continue;
             }
-            
+            std::cout << "C" << c<<std::endl;
             return false;
         }
         return true;
