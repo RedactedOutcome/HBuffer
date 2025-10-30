@@ -1,13 +1,6 @@
 #pragma once
 
 //Handles defines and importing standard library
-#ifdef HBUFFER_USE_PCH
-#ifndef HBUFFER_PCH_DIR
-    #error HBUFFER no pch location specified
-#endif
-
-#include HBUFFER_PCH_DIR
-#else
 #include <iostream>
 #include <string>
 #include <string.h>
@@ -15,8 +8,6 @@
 #include <memory>
 #include <algorithm>
 #include <vector>
-
-#endif
 //#if __cplusplus < 201103L
 //#error HBUFFER ONLY SUPPORTS CPP11+ remind the dev to actually work on his code 
 //#endif
