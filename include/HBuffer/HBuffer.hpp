@@ -859,7 +859,7 @@ public:
 
     /// @brief Create a new HBuffer that points to the same data as the current one but with an offset and or different size
     /// @param allowModify a check to allow this subpointer to modify data as long as the main buffer also can modify this data
-    HBuffer SubPointer(size_t at, size_t len=-1, bool allowModify = true) const noexcept{
+    HBuffer SubPointer(size_t at, size_t len=-1, bool allowModify = true) const HBUFF_NOEXCEPT{
         if(at >= m_Size)return HBuffer();
         size_t size = std::min(len, m_Size - at);
         return HBuffer(m_Data + at, size, m_Capacity - at, false, allowModify && m_CanModify);
@@ -1116,7 +1116,7 @@ public:
     /// @brief Splits the buffer into multiple sub pointers with a delimiter
     /// @param max the max amount of times to split by delimiter
     template<typename Allocator=std::allocator<HBuffer>>
-    std::vector<HBuffer, Allocator> SubPointerSplitByDelimiter(char delim, size_t max=-1)const noexcept{
+    std::vector<HBuffer, Allocator> SubPointerSplitByDelimiter(char delim, size_t max=-1)const HBUFF_NOEXCEPT{
         std::vector<HBuffer, Allocator> parts;
         size_t lastAt = 0;
         size_t i;
@@ -1351,7 +1351,7 @@ public:
         return *this;
     }
 
-    friend HBuffer operator+(const char* left, const HBuffer& right) noexcept{
+    friend HBuffer operator+(const char* left, const HBuffer& right) HBUFF_NOEXCEPT{
         size_t strLen = strlen(left);
         if(strLen + right.m_Size < 1)return HBuffer();
         HBuffer buffer;
@@ -1484,7 +1484,7 @@ struct fmt::formatter<HBuffer> {
 namespace std {
     template<>
     struct hash<HBuffer> {
-        std::size_t operator()(const HBuffer& buff) const noexcept{
+        std::size_t operator()(const HBuffer& buff) const HBUFF_NOEXCEPT{
             std::size_t hash = 0;
             std::size_t prime = 31; // A small prime number
 
