@@ -158,6 +158,21 @@ public:
     void AssignCapacity(size_t capacity) HBUFF_NOEXCEPT{
         m_Capacity = capacity;
     }
+
+    void Resize(size_t newSize) HBUFF_NOEXCEPT{
+        if(newSize >= m_Capacity){
+            char* data = new char[newSize];
+            memcpy(data, m_Data, m_Size);
+            delete m_Data;
+            m_Data = data;
+            m_Size = newSize;
+            m_Capacity = newSize;
+            m_CanFree = true;
+            m_CanModify= true;
+            return;
+        }
+        m_Size = newSize;
+    }
     /// @brief Reserves the buffer to be atleast param newSize bytes. If newSize <= capacity then no reallocation is done. Else we free/release data and reallocate
     /// @param newCapacity the new capacity of the buffer. Only reallocates if newCapacity > m_Capacity 
     void Reserve(size_t newCapacity) HBUFF_NOEXCEPT{
