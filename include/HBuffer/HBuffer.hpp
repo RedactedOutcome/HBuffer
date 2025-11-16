@@ -271,32 +271,10 @@ public:
 
     static HBuffer ToString(float number) HBUFF_NOEXCEPT{
         HBuffer buffer;
-        buffer.ReserveString(7);
+        buffer.ReserveString(10);
 
-        uint32_t bits = *reinterpret_cast<uint32_t*>(&number);
-        uint8_t sign = bits >> 31;
-        int8_t exponent = ((bits >> 23) & 0xFF) - 127; // Bias correction for IEEE-754
-
-        if(sign == 1)buffer.AppendString('-');
-        if(exponent == 0 || exponent == 255){
-            buffer.AppendString("Inf");
-            return buffer;
-        }
-        int mantissa = bits & 0x7FFFFF;
-        int pow10 = exponent * 30103 / 100000;
-
-        int fractionNumerator = (1<<23) | mantissa;
-        int fractionDenominator = (1<<23);
-
-        if(exponent >= 0)fractionNumerator<<=exponent;
-        else fractionNumerator<<=exponent;
-
-        if(sign)fractionNumerator = -(int)fractionNumerator;
-
-        int64_t intPart =  fractionNumerator / fractionDenominator;
-        int rem = abs(fractionNumerator % fractionDenominator);
-
-        buffer = HBuffer::ToString((size_t)intPart);
+        int charsWritten = snprintf(buffer.m_Data, 10, "%.3f", number);
+        buffer.m_Size = charsWritten;
         return buffer;
     }
 
