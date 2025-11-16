@@ -296,7 +296,7 @@ public:
         int64_t intPart =  fractionNumerator / fractionDenominator;
         int rem = abs(fractionNumerator % fractionDenominator);
 
-        buffer = ToString(intPart);
+        buffer = HBuffer::ToString((size_t)intPart);
         return buffer;
     }
 
