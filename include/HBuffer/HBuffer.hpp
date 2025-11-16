@@ -259,7 +259,7 @@ public:
     static HBuffer ToString(size_t number) HBUFF_NOEXCEPT{
         HBuffer buffer;
         buffer.ReserveString(5);
-
+        buffer[0] = '\00';
         while(number > 0){
             buffer.AppendString((number % 10) + '0');
             number /= 10;
